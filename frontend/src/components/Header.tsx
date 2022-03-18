@@ -11,25 +11,23 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import emblem from '../img/emblem.png';
 import styled from 'styled-components';
 
 const MENU_ID = 'primary-search-account-menu';
 const MOBILE_MENU_ID = 'primary-search-account-menu-mobile';
 
-export default function PrimarySearchAppBar() {
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+const Header = () => {
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<null | HTMLElement>(null);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
+  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
 
-  const handleMobileMenuOpen = (event: any) => {
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
     setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const renderMobileMenu = (
     <Menu
@@ -43,7 +41,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem>
         <IconButton aria-label='show 11 new notifications' color='inherit'>
-          <Badge badgeContent={11} color='secondary'>
+          <Badge badgeContent={4} color='secondary'>
             <ShoppingCart />
           </Badge>
         </IconButton>
@@ -123,7 +121,9 @@ export default function PrimarySearchAppBar() {
       {renderMobileMenu}
     </>
   );
-}
+};
+
+export default Header;
 
 const StyledAppBar = styled(AppBar)`
   && {
