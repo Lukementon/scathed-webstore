@@ -1,9 +1,17 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import {
+  createTheme,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  ThemeProvider,
+} from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -15,6 +23,37 @@ interface Props {
   description: string;
 }
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#dddbdb',
+    },
+    secondary: {
+      main: '#464545',
+    },
+  },
+});
+
+const useStyles = makeStyles({
+  select: {
+    '&:before': {
+      borderColor: 'white',
+    },
+    '&:after': {
+      borderColor: 'white',
+    },
+    '&:not(.Mui-disabled):hover::before': {
+      borderColor: 'white',
+    },
+  },
+  icon: {
+    fill: 'white',
+  },
+  root: {
+    color: 'white',
+  },
+});
+
 const ProductCard: React.FC<Props> = ({
   name,
   image,
@@ -25,49 +64,66 @@ const ProductCard: React.FC<Props> = ({
   const [size, setSize] = useState('');
   const handleSelectChange = () => setSize('m');
 
+  const classes = useStyles();
+
   return (
-    <StyledProductCard>
-      <StyledProductHeader>
-        <Typography
-          variant='h6'
-          color='inherit'
-          children={name}
-          component='p'
-        />
-        <Typography
-          variant='body2'
-          color='inherit'
-          children={category}
-          component='p'
-        />
-      </StyledProductHeader>
-      <StyledProductMedia image={image} title={name} />
-      <CardContent>
-        <Typography variant='body2' color='inherit' component='p'>
-          {description}
-        </Typography>
-        <Typography variant='body2' color='inherit' component='p'>
-          €{price}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <StyledFormControl variant='outlined'>
-          <InputLabel id='demo-simple-select-outlined-label'>Size</InputLabel>
-          <Select
-            variant='outlined'
-            labelId='demo-simple-select-outlined-label'
-            id='demo-simple-select-outlined'
-            value={size}
-            onChange={handleSelectChange}
-            label='Size'
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </StyledFormControl>
-      </CardActions>
-    </StyledProductCard>
+    <ThemeProvider theme={theme}>
+      <StyledProductCard>
+        <StyledProductHeader>
+          <Typography
+            variant='h6'
+            color='inherit'
+            children={name}
+            component='p'
+          />
+          <Typography
+            variant='body2'
+            color='inherit'
+            children={category}
+            component='p'
+          />
+        </StyledProductHeader>
+        <StyledProductMedia image={image} title={name} />
+        <CardContent>
+          <Typography variant='body2' color='inherit' component='p'>
+            {description}
+          </Typography>
+          <Typography variant='body2' color='inherit' component='p'>
+            €{price}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <StyledFormControl variant='outlined'>
+            <InputLabel
+              className={classes.root}
+              id='demo-simple-select-outlined-label'
+            >
+              Size
+            </InputLabel>
+            <Select
+              className={classes.select}
+              inputProps={{
+                classes: {
+                  icon: classes.icon,
+                  root: classes.root,
+                },
+              }}
+              variant='outlined'
+              color='primary'
+              labelId='demo-simple-select-outlined-label'
+              id='demo-simple-select-outlined'
+              value={size}
+              onChange={handleSelectChange}
+              label='Size'
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </StyledFormControl>
+        </CardActions>
+      </StyledProductCard>
+    </ThemeProvider>
   );
 };
 
@@ -99,6 +155,5 @@ const StyledFormControl = styled(FormControl)`
     width: 100%;
     margin-right: auto;
     margin-left: auto;
-    color: white;
   }
 `;

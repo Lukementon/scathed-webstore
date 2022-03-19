@@ -8,6 +8,7 @@ const HomePage = () => {
     <HomePageContainer>
       {products.map(({ name, image, category, price, description }) => (
         <ProductCard
+          key={name}
           name={name}
           category={category}
           price={price}
