@@ -127,7 +127,7 @@ export default Header;
 
 const StyledAppBar = styled(AppBar)`
   && {
-    background: #1d1d1d;
+    background-color: #1d1d1d;
   }
 `;
 
