@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -24,6 +25,7 @@ const ProductCard: React.FC<Props> = ({
 }) => {
   const [size, setSize] = useState('');
   const handleSelectChange = () => setSize('m');
+
   return (
     <StyledProductCard>
       <StyledProductHeader>
@@ -50,23 +52,21 @@ const ProductCard: React.FC<Props> = ({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <FormControl variant='outlined'>
-          <InputLabel id='demo-simple-select-outlined-label'>Age</InputLabel>
+        <StyledFormControl variant='outlined'>
+          <InputLabel id='demo-simple-select-outlined-label'>Size</InputLabel>
           <Select
+            variant='outlined'
             labelId='demo-simple-select-outlined-label'
             id='demo-simple-select-outlined'
             value={size}
             onChange={handleSelectChange}
-            label='Age'
+            label='Size'
           >
-            <MenuItem value=''>
-              <em>None</em>
-            </MenuItem>
             <MenuItem value={10}>Ten</MenuItem>
             <MenuItem value={20}>Twenty</MenuItem>
             <MenuItem value={30}>Thirty</MenuItem>
           </Select>
-        </FormControl>
+        </StyledFormControl>
       </CardActions>
     </StyledProductCard>
   );
@@ -93,4 +93,13 @@ const StyledProductHeader = styled.div`
 const StyledProductMedia = styled(CardMedia)`
   height: 30rem;
   width: 100%;
+`;
+
+const StyledFormControl = styled(FormControl)`
+  && {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    color: white;
+  }
 `;
