@@ -49,8 +49,6 @@ const ProductDetailsPage = () => {
     availableQuantitiesForEachSize
   ).find(key => key[0] === selectedSize)?.[1];
 
-  const redirectToHomePage = () => navigate('/');
-
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [
     createData('Quantity:', 0),
@@ -67,7 +65,7 @@ const ProductDetailsPage = () => {
     <ProductDetailsContainer>
       <TooltipContainer>
         <Tooltip title='Back to products'>
-          <StyledGoBackIcon fontSize='large' onClick={redirectToHomePage} />
+          <StyledGoBackIcon fontSize='large' onClick={() => navigate('/')} />
         </Tooltip>
       </TooltipContainer>
       <ProductDetailsMiddle>
