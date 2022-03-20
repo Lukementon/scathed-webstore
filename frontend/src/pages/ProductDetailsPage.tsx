@@ -7,16 +7,16 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
@@ -25,6 +25,8 @@ import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
+  console.log('quantityArray', quantityArray);
 
   const navigate = useNavigate();
   const classes = useSelectStyles();
@@ -35,12 +37,31 @@ const ProductDetailsPage = () => {
     product => product.id === productIdFromUrlParams
   ) as Product;
 
+  const totalProductStock = countInStock
+    .map(({ stock }) => stock)
+    .reduce((acc, cur) => acc + cur, 0);
+
+  const availableQuantitiesForEachSize = Object.fromEntries(
+    countInStock.map(el => [el.size, el.stock])
+  );
+
+  const quantityForSelectedSize = Object.entries(
+    availableQuantitiesForEachSize
+  ).find(key => key[0] === selectedSize)?.[1];
+
   const redirectToHomePage = () => navigate('/');
 
   const createData = (name: string, count: number) => ({ name, count });
-  const rows = [createData('Quantity:', 2), createData('In stock;', 7)];
+  const rows = [
+    createData('Quantity:', 0),
+    createData('In stock;', totalProductStock),
+  ];
 
-  console.log(countInStock);
+  useEffect(() => {
+    setQuantityArray(
+      Array.from({ length: quantityForSelectedSize as number }, (_, i) => i + 1)
+    );
+  }, [quantityForSelectedSize]);
 
   return (
     <ProductDetailsContainer>
@@ -103,9 +124,9 @@ const ProductDetailsPage = () => {
                 labelId='demo-simple-select-outlined-label'
                 id='demo-simple-select-outlined'
                 value={selectedSize}
-                onChange={(
-                  e: React.ChangeEvent<{ name?: string; value: unknown }>
-                ) => setSelectedSize(e.target.value as string)}
+                onChange={(e: React.ChangeEvent<{ value: unknown }>) =>
+                  setSelectedSize(e.target.value as string)
+                }
                 label='Size'
               >
                 {countInStock.map(({ size }) => (
