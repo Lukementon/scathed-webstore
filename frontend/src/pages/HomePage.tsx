@@ -6,16 +6,19 @@ import products from '../products';
 const HomePage = () => {
   return (
     <HomePageContainer>
-      {products.map(({ name, image, category, price, description }) => (
-        <ProductCard
-          key={name}
-          name={name}
-          category={category}
-          price={price}
-          image={image}
-          description={description}
-        />
-      ))}
+      {products.map(
+        ({ name, image, category, price, description, countInStock }) => (
+          <ProductCard
+            key={name}
+            name={name}
+            category={category}
+            price={price}
+            image={image}
+            description={description}
+            countInStock={countInStock}
+          />
+        )
+      )}
     </HomePageContainer>
   );
 };

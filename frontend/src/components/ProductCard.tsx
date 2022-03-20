@@ -1,4 +1,5 @@
 import {
+  Button,
   createTheme,
   FormControl,
   InputLabel,
@@ -21,6 +22,7 @@ interface Props {
   category: string;
   price: number;
   description: string;
+  countInStock: any;
 }
 
 const theme = createTheme({
@@ -60,9 +62,9 @@ const ProductCard: React.FC<Props> = ({
   category,
   price,
   description,
+  countInStock,
 }) => {
-  const [size, setSize] = useState('');
-  const handleSelectChange = () => setSize('m');
+  const [selectedSize, setSelectedSize] = useState('');
 
   const classes = useStyles();
 
@@ -112,14 +114,17 @@ const ProductCard: React.FC<Props> = ({
               color='primary'
               labelId='demo-simple-select-outlined-label'
               id='demo-simple-select-outlined'
-              value={size}
-              onChange={handleSelectChange}
+              value={selectedSize}
+              onChange={(e: any) => setSelectedSize(e.target.value)}
               label='Size'
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {countInStock.map(({ size }: Record<string, string>) => (
+                <MenuItem value={size}>{size}</MenuItem>
+              ))}
             </Select>
+            <AddToCartButton variant='outlined' color='primary'>
+              Add to cart
+            </AddToCartButton>
           </StyledFormControl>
         </CardActions>
       </StyledProductCard>
@@ -155,5 +160,12 @@ const StyledFormControl = styled(FormControl)`
     width: 100%;
     margin-right: auto;
     margin-left: auto;
+  }
+`;
+
+const AddToCartButton = styled(Button)`
+  && {
+    margin-top: 1rem;
+    padding: 0.5rem 0;
   }
 `;
