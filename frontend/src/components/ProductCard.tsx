@@ -10,10 +10,10 @@ import {
   Select,
   Typography,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelectStyles } from '../hooks/styles/themes';
 import { Product } from '../types/types';
 import { truncateString } from '../utils/text';
 
@@ -27,7 +27,7 @@ const ProductCard: React.FC<Product> = ({
   id,
 }) => {
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const classes = useStyles();
+  const classes = useSelectStyles();
   const navigate = useNavigate();
 
   const redirectToProductDetailsPage = (id: string) =>
@@ -95,26 +95,6 @@ const ProductCard: React.FC<Product> = ({
 };
 
 export default ProductCard;
-
-const useStyles = makeStyles({
-  select: {
-    '&:before': {
-      borderColor: 'white',
-    },
-    '&:after': {
-      borderColor: 'white',
-    },
-    '&:not(.Mui-disabled):hover::before': {
-      borderColor: 'white',
-    },
-  },
-  icon: {
-    fill: 'white',
-  },
-  root: {
-    color: 'white',
-  },
-});
 
 const StyledProductCard = styled(Card)`
   && {

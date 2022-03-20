@@ -5,7 +5,6 @@ import {
   CardContent,
   FormControl,
   InputLabel,
-  makeStyles,
   MenuItem,
   Select,
   Tooltip,
@@ -20,6 +19,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelectStyles } from '../hooks/styles/themes';
 import products from '../products';
 import { Product } from '../types/types';
 
@@ -27,7 +27,7 @@ const ProductDetailsPage = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
 
   const navigate = useNavigate();
-  const classes = useStyles();
+  const classes = useSelectStyles();
   const params = useParams();
   const productIdFromUrlParams = params.id;
 
@@ -39,6 +39,8 @@ const ProductDetailsPage = () => {
 
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [createData('Quantity:', 2), createData('In stock;', 7)];
+
+  console.log(countInStock);
 
   return (
     <ProductDetailsContainer>
@@ -129,26 +131,6 @@ const ProductDetailsPage = () => {
 };
 
 export default ProductDetailsPage;
-
-const useStyles = makeStyles({
-  select: {
-    '&:before': {
-      borderColor: 'white',
-    },
-    '&:after': {
-      borderColor: 'white',
-    },
-    '&:not(.Mui-disabled):hover::before': {
-      borderColor: 'white',
-    },
-  },
-  icon: {
-    fill: 'white',
-  },
-  root: {
-    color: 'white',
-  },
-});
 
 const StyledGoBackIcon = styled(KeyboardBackspaceIcon)`
   color: white;
