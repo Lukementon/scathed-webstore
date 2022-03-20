@@ -6,9 +6,10 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       {products.map(
-        ({ name, image, category, price, description, countInStock }) => (
+        ({ name, image, category, price, description, countInStock, _id }) => (
           <ProductCard
-            key={name}
+            key={_id}
+            id={_id}
             name={name}
             category={category}
             price={price}
@@ -25,7 +26,6 @@ const HomePage = () => {
 export default HomePage;
 
 const HomePageContainer = styled.div`
-  margin-top: 3rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 5rem;

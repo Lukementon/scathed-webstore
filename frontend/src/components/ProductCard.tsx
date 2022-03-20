@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Product } from '../types/types';
 import {
@@ -16,6 +17,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import { truncateString } from '../utils/stringMutations';
 
 const ProductCard: React.FC<Product> = ({
   name,
@@ -24,19 +26,25 @@ const ProductCard: React.FC<Product> = ({
   price,
   description,
   countInStock,
+  id,
 }) => {
-  const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [selectedSize, setSelectedSize] = useState<string>('');
   const classes = useStyles();
+  const navigate = useNavigate();
+
+  const redirectToProductDetailsPage = (id: string) => {
+    navigate(`/product/${id}`);
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <StyledProductCard>
         <StyledProductHeader>
-          <Typography
+          <ProductNameTypography
             variant='h6'
             color='inherit'
             children={name}
-            component='p'
+            onClick={() => redirectToProductDetailsPage(id)}
           />
           <Typography
             variant='body2'
@@ -48,7 +56,7 @@ const ProductCard: React.FC<Product> = ({
         <StyledProductMedia image={image} title={name} />
         <CardContent>
           <Typography variant='body2' color='inherit' component='p'>
-            {description}
+            {truncateString(description, 55)}
           </Typography>
           <Typography variant='body2' color='inherit' component='p'>
             €{price}
@@ -142,6 +150,12 @@ const StyledProductHeader = styled.div`
   && {
     padding: 1rem;
     color: white;
+  }
+`;
+
+const ProductNameTypography = styled(Typography)`
+  && {
+    cursor: pointer;
   }
 `;
 
