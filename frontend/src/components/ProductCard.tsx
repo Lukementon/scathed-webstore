@@ -15,48 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Product } from '../types/types';
 
-interface Props {
-  name: string;
-  image: string;
-  category: string;
-  price: number;
-  description: string;
-  countInStock: any;
-}
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#dddbdb',
-    },
-    secondary: {
-      main: '#464545',
-    },
-  },
-});
-
-const useStyles = makeStyles({
-  select: {
-    '&:before': {
-      borderColor: 'white',
-    },
-    '&:after': {
-      borderColor: 'white',
-    },
-    '&:not(.Mui-disabled):hover::before': {
-      borderColor: 'white',
-    },
-  },
-  icon: {
-    fill: 'white',
-  },
-  root: {
-    color: 'white',
-  },
-});
-
-const ProductCard: React.FC<Props> = ({
+const ProductCard: React.FC<Product> = ({
   name,
   image,
   category,
@@ -65,7 +26,6 @@ const ProductCard: React.FC<Props> = ({
   countInStock,
 }) => {
   const [selectedSize, setSelectedSize] = useState('');
-
   const classes = useStyles();
 
   return (
@@ -80,7 +40,7 @@ const ProductCard: React.FC<Props> = ({
           />
           <Typography
             variant='body2'
-            color='inherit'
+            color='primary'
             children={category}
             component='p'
           />
@@ -118,11 +78,13 @@ const ProductCard: React.FC<Props> = ({
               onChange={(e: any) => setSelectedSize(e.target.value)}
               label='Size'
             >
-              {countInStock.map(({ size }: Record<string, string>) => (
-                <MenuItem value={size}>{size}</MenuItem>
+              {countInStock.map(({ size }) => (
+                <MenuItem key={size} value={size}>
+                  {size}
+                </MenuItem>
               ))}
             </Select>
-            <AddToCartButton variant='outlined' color='primary'>
+            <AddToCartButton variant='outlined' color='secondary'>
               Add to cart
             </AddToCartButton>
           </StyledFormControl>
@@ -133,6 +95,37 @@ const ProductCard: React.FC<Props> = ({
 };
 
 export default ProductCard;
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#696969',
+    },
+    secondary: {
+      main: '#ffffff',
+    },
+  },
+});
+
+const useStyles = makeStyles({
+  select: {
+    '&:before': {
+      borderColor: 'white',
+    },
+    '&:after': {
+      borderColor: 'white',
+    },
+    '&:not(.Mui-disabled):hover::before': {
+      borderColor: 'white',
+    },
+  },
+  icon: {
+    fill: 'white',
+  },
+  root: {
+    color: 'white',
+  },
+});
 
 const StyledProductCard = styled(Card)`
   && {
@@ -165,7 +158,7 @@ const StyledFormControl = styled(FormControl)`
 
 const AddToCartButton = styled(Button)`
   && {
-    margin-top: 1rem;
+    margin: 1rem 0;
     padding: 0.5rem 0;
   }
 `;
