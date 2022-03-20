@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Product } from '../types/types';
 import {
   Button,
   createTheme,
@@ -6,16 +9,13 @@ import {
   MenuItem,
   Select,
   ThemeProvider,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
 } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Product } from '../types/types';
 
 const ProductCard: React.FC<Product> = ({
   name,
@@ -25,7 +25,7 @@ const ProductCard: React.FC<Product> = ({
   description,
   countInStock,
 }) => {
-  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const classes = useStyles();
 
   return (
@@ -75,7 +75,9 @@ const ProductCard: React.FC<Product> = ({
               labelId='demo-simple-select-outlined-label'
               id='demo-simple-select-outlined'
               value={selectedSize}
-              onChange={(e: any) => setSelectedSize(e.target.value)}
+              onChange={(
+                e: React.ChangeEvent<{ name?: string; value: unknown }>
+              ) => setSelectedSize(e.target.value as string)}
               label='Size'
             >
               {countInStock.map(({ size }) => (

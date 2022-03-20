@@ -1,15 +1,20 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 
 const App = () => {
   return (
-    <AppContainer>
-      <Header />
-      <Main>
-        <HomePage />
-      </Main>
-    </AppContainer>
+    <BrowserRouter>
+      <Routes>
+        <AppContainer>
+          <Header />
+          <Main>
+            <Route path='/' element={<HomePage />} />
+          </Main>
+        </AppContainer>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
