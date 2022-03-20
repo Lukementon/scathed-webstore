@@ -1,9 +1,10 @@
 const products = [
   {
-    _id: '1',
+    id: '1',
     name: 'Deceit Black Tshirt',
     image: '/img/deceit_black_tshirt.jpeg',
-    description: 'Black Tshirt with the Deceit artwork',
+    description:
+      'The artwork for our latest single Deceit now available in shirt form. White design printed on a black Gildan Softstyle t-shirt. Artwork by Adam Robert Martin. Printed by Heck Press.',
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
@@ -15,10 +16,11 @@ const products = [
     ],
   },
   {
-    _id: '2',
+    id: '2',
     name: 'Deceit Burgundy Tshirt',
     image: '/img/deceit_burgundy_tshirt.jpeg',
-    description: 'Burgundy Tshirt with the Deceit artwork',
+    description:
+      'The artwork for our latest single Deceit now available in shirt form. White design printed on a burgundy Gildan Softstyle t-shirt. Artwork by Adam Robert Martin. Printed by Heck Press.',
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
@@ -30,10 +32,11 @@ const products = [
     ],
   },
   {
-    _id: '3',
+    id: '3',
     name: 'Deceit pink Tshirt',
     image: '/img/deceit_pink_tshirt.jpeg',
-    description: 'Black Tshirt with the Deceit artwork',
+    description:
+      'The artwork for our latest single Deceit now available in shirt form. White design printed on a pink Gildan Softstyle t-shirt. Artwork by Adam Robert Martin. Printed by Heck Press.',
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
@@ -45,7 +48,7 @@ const products = [
     ],
   },
   {
-    _id: '4',
+    id: '4',
     name: 'Where Truth Occurs White Tshirt',
     image: '/img/truth_white_tshirt.jpeg',
     description: 'Where truth occurs Tshirt with album artwork',
@@ -60,7 +63,7 @@ const products = [
     ],
   },
   {
-    _id: '5',
+    id: '5',
     name: 'Scathed Charcoal Hat',
     image: '/img/scathed_charcoal_hat.jpeg',
     description: 'Scathed charcoal beanie',
@@ -69,7 +72,7 @@ const products = [
     countInStock: [{ size: 'single', stock: 2 }],
   },
   {
-    _id: '6',
+    id: '6',
     name: 'Scathed Cream Hat',
     image: '/img/scathed_cream_hat.jpeg',
     description: 'Scathed cream beanie',
@@ -78,7 +81,7 @@ const products = [
     countInStock: [{ size: 'single', stock: 6 }],
   },
   {
-    _id: '7',
+    id: '7',
     name: 'Scathed Pink Hat',
     image: '/img/scathed_pink_hat.jpeg',
     description: 'Scathed pink beanie',
@@ -87,7 +90,7 @@ const products = [
     countInStock: [{ size: 'single', stock: 9 }],
   },
   {
-    _id: '8',
+    id: '8',
     name: 'Scathed Rust Hat',
     image: '/img/scathed_rust_hat.jpeg',
     description: 'Scathed rust beanie',
@@ -96,7 +99,7 @@ const products = [
     countInStock: [{ size: 'single', stock: 5 }],
   },
   {
-    _id: '9',
+    id: '9',
     name: 'Where truth occurs EP',
     image: '/img/scathed_where_truth_occurs.jpeg',
     description:

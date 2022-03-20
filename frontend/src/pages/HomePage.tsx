@@ -6,10 +6,10 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       {products.map(
-        ({ name, image, category, price, description, countInStock, _id }) => (
+        ({ name, image, category, price, description, countInStock, id }) => (
           <ProductCard
-            key={_id}
-            id={_id}
+            key={name}
+            id={id}
             name={name}
             category={category}
             price={price}
