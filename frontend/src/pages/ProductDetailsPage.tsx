@@ -26,7 +26,7 @@ import { Product } from '../types/types';
 const ProductDetailsPage = () => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
-  console.log('quantityArray', quantityArray);
+  const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
 
   const navigate = useNavigate();
   const classes = useSelectStyles();
@@ -51,7 +51,7 @@ const ProductDetailsPage = () => {
 
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [
-    createData('Quantity:', 0),
+    createData('Quantity:', selectedQuantity as number),
     createData('In stock;', totalProductStock),
   ];
 
@@ -68,9 +68,9 @@ const ProductDetailsPage = () => {
           <StyledGoBackIcon fontSize='large' onClick={() => navigate('/')} />
         </Tooltip>
       </TooltipContainer>
-      <ProductDetailsMiddle>
+      <ProductImageContainer>
         <ProductImage src={image} alt={name} />
-      </ProductDetailsMiddle>
+      </ProductImageContainer>
 
       <SummaryContainer>
         <Typography variant='h5' color='inherit' children={name} />
@@ -102,41 +102,78 @@ const ProductDetailsPage = () => {
             </TableContainer>
           </CardContent>
           <CardActions disableSpacing>
-            <StyledFormControl variant='outlined'>
-              <InputLabel
-                className={classes.root}
-                id='demo-simple-select-outlined-label'
-              >
-                Size
-              </InputLabel>
-              <Select
-                className={classes.select}
-                inputProps={{
-                  classes: {
-                    icon: classes.icon,
-                    root: classes.root,
-                  },
-                }}
-                variant='outlined'
-                color='primary'
-                labelId='demo-simple-select-outlined-label'
-                id='demo-simple-select-outlined'
-                value={selectedSize}
-                onChange={(e: React.ChangeEvent<{ value: unknown }>) =>
-                  setSelectedSize(e.target.value as string)
-                }
-                label='Size'
-              >
-                {countInStock.map(({ size }) => (
-                  <MenuItem key={size} value={size}>
-                    {size}
-                  </MenuItem>
-                ))}
-              </Select>
-              <AddToCartButton variant='outlined' color='secondary'>
-                Add to cart
-              </AddToCartButton>
-            </StyledFormControl>
+            <FormContainer>
+              <StyledFormControl variant='outlined'>
+                <InputLabel
+                  className={classes.root}
+                  id='demo-simple-select-outlined-label'
+                >
+                  Size
+                </InputLabel>
+                <Select
+                  className={classes.select}
+                  inputProps={{
+                    classes: {
+                      icon: classes.icon,
+                      root: classes.root,
+                    },
+                  }}
+                  variant='outlined'
+                  color='primary'
+                  labelId='demo-simple-select-outlined-label'
+                  id='demo-simple-select-outlined'
+                  value={selectedSize}
+                  onChange={(e: React.ChangeEvent<{ value: unknown }>) =>
+                    setSelectedSize(e.target.value as string)
+                  }
+                  label='Size'
+                >
+                  {countInStock.map(({ size }) => (
+                    <MenuItem key={size} value={size}>
+                      {size}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+
+              <StyledFormControl variant='outlined'>
+                <InputLabel
+                  className={classes.root}
+                  id='demo-simple-select-outlined-label'
+                >
+                  Quantity
+                </InputLabel>
+                <Select
+                  className={classes.select}
+                  inputProps={{
+                    classes: {
+                      icon: classes.icon,
+                      root: classes.root,
+                    },
+                  }}
+                  disabled={!selectedSize}
+                  variant='outlined'
+                  color='primary'
+                  labelId='demo-simple-select-outlined-label'
+                  id='demo-simple-select-outlined'
+                  value={selectedQuantity}
+                  onChange={(e: React.ChangeEvent<{ value: unknown }>) =>
+                    setSelectedQuantity(e.target.value as number)
+                  }
+                  label='Size'
+                >
+                  {quantityArray?.map(num => (
+                    <MenuItem key={num} value={num}>
+                      {num}
+                    </MenuItem>
+                  ))}
+                </Select>
+
+                <AddToCartButton variant='outlined' color='secondary'>
+                  Add to cart
+                </AddToCartButton>
+              </StyledFormControl>
+            </FormContainer>
           </CardActions>
         </SummaryCard>
         <StyledDescription
@@ -202,11 +239,19 @@ const SummaryContainer = styled.div`
   }
 `;
 
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const StyledFormControl = styled(FormControl)`
   && {
     width: 100%;
     margin-right: auto;
     margin-left: auto;
+    margin: 0.5rem 0;
+    text-align: left;
   }
 `;
 
@@ -224,7 +269,7 @@ const StyledDescription = styled(Typography)`
   }
 `;
 
-const ProductDetailsMiddle = styled.div`
+const ProductImageContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;

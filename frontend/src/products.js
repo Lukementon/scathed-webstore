@@ -8,11 +8,11 @@ const products = [
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
-      { size: 'small', stock: 5 },
-      { size: 'medium', stock: 8 },
-      { size: 'large', stock: 6 },
-      { size: 'xl', stock: 7 },
-      { size: 'xxl', stock: 2 },
+      { size: 'Small', stock: 5 },
+      { size: 'Medium', stock: 8 },
+      { size: 'Large', stock: 6 },
+      { size: 'Xl', stock: 7 },
+      { size: 'Xxl', stock: 2 },
     ],
   },
   {
@@ -24,11 +24,11 @@ const products = [
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
-      { size: 'small', stock: 5 },
-      { size: 'medium', stock: 8 },
-      { size: 'large', stock: 6 },
-      { size: 'xl', stock: 7 },
-      { size: 'xxl', stock: 2 },
+      { size: 'Small', stock: 5 },
+      { size: 'Medium', stock: 8 },
+      { size: 'Large', stock: 6 },
+      { size: 'Xl', stock: 7 },
+      { size: 'Xxl', stock: 2 },
     ],
   },
   {
@@ -40,11 +40,11 @@ const products = [
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
-      { size: 'small', stock: 5 },
-      { size: 'medium', stock: 8 },
-      { size: 'large', stock: 6 },
-      { size: 'xl', stock: 7 },
-      { size: 'xxl', stock: 2 },
+      { size: 'Small', stock: 5 },
+      { size: 'Medium', stock: 8 },
+      { size: 'Large', stock: 6 },
+      { size: 'Xl', stock: 7 },
+      { size: 'Xxl', stock: 2 },
     ],
   },
   {
@@ -55,11 +55,11 @@ const products = [
     category: 'Tshirt/Clothing',
     price: 15.0,
     countInStock: [
-      { size: 'small', stock: 5 },
-      { size: 'medium', stock: 8 },
-      { size: 'large', stock: 6 },
-      { size: 'xl', stock: 7 },
-      { size: 'xxl', stock: 2 },
+      { size: 'Small', stock: 5 },
+      { size: 'Medium', stock: 8 },
+      { size: 'Large', stock: 6 },
+      { size: 'Xl', stock: 7 },
+      { size: 'Xxl', stock: 2 },
     ],
   },
   {
@@ -69,7 +69,7 @@ const products = [
     description: 'Scathed charcoal beanie',
     category: 'Beanie/Clothing',
     price: 10.0,
-    countInStock: [{ size: 'single', stock: 2 }],
+    countInStock: [{ size: 'Single', stock: 2 }],
   },
   {
     id: '6',
@@ -78,7 +78,7 @@ const products = [
     description: 'Scathed cream beanie',
     category: 'Beanie/Clothing',
     price: 10.0,
-    countInStock: [{ size: 'single', stock: 6 }],
+    countInStock: [{ size: 'Single', stock: 6 }],
   },
   {
     id: '7',
@@ -87,7 +87,7 @@ const products = [
     description: 'Scathed pink beanie',
     category: 'Beanie/Clothing',
     price: 10.0,
-    countInStock: [{ size: 'single', stock: 9 }],
+    countInStock: [{ size: 'Single', stock: 9 }],
   },
   {
     id: '8',
@@ -96,7 +96,7 @@ const products = [
     description: 'Scathed rust beanie',
     category: 'Beanie/Clothing',
     price: 10.0,
-    countInStock: [{ size: 'single', stock: 5 }],
+    countInStock: [{ size: 'Single', stock: 5 }],
   },
   {
     id: '9',
@@ -106,7 +106,7 @@ const products = [
       '4 panel Digi pack with artwork and layout by Kelvin Doran of Serpent Tusk Studio',
     category: 'Music/CD',
     price: 5.0,
-    countInStock: [{ size: 'single', stock: 8 }],
+    countInStock: [{ size: 'Single', stock: 8 }],
   },
 ];
 
