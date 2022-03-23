@@ -1,12 +1,11 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
-const products = require('./data/products');
+import express, { Application, NextFunction, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import { products } from './data/products';
 import { Product } from './types/types';
 
-const app: Application = express();
+dotenv.config();
 
-app.get('/api', (req: Request, res: Response, next: NextFunction) => {
-  res.send('Hello');
-});
+const app: Application = express();
 
 app.get('/api/products', (req: Request, res: Response, next: NextFunction) => {
   res.json(products);
@@ -19,9 +18,12 @@ app.get(
       (product: Product) => product.id === req.params.id
     );
 
-    console.log('product', product);
     res.json(product);
   }
 );
 
-app.listen(5000, () => console.log('server running'));
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () =>
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);

@@ -1,4 +1,4 @@
-const products = [
+export const products = [
   {
     id: '1',
     name: 'Deceit Black Tshirt',
@@ -109,5 +109,3 @@ const products = [
     countInStock: [{ size: 'Single', stock: 8 }],
   },
 ];
-
-module.exports = products;

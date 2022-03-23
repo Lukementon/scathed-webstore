@@ -6,6 +6,7 @@ import { Product } from '../types/types';
 
 const HomePage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  console.log(products);
 
   useEffect(() => {
     const fetchProducts = async () => {
