@@ -1,6 +1,9 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
-const products = require('./data/products');
+import dotenv from 'dotenv';
+import products from './data/products.js';
 import { Product } from './types/types';
+
+dotenv.config();
 
 const app: Application = express();
 
@@ -19,9 +22,14 @@ app.get(
       (product: Product) => product.id === req.params.id
     );
 
-    console.log('product', product);
     res.json(product);
   }
 );
 
-app.listen(5000, () => console.log('server running'));
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () =>
+  console.log(
+    `Server running in in ${process.env.NODE_ENV} mode on port ${PORT}`
+  )
+);
