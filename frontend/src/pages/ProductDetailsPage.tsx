@@ -16,14 +16,15 @@ import {
   Typography,
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
-import products from '../products';
 import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
+  const [product, setProduct] = useState<Product>();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
@@ -33,16 +34,23 @@ const ProductDetailsPage = () => {
   const params = useParams();
   const productIdFromUrlParams = params.id;
 
-  const { name, description, price, image, countInStock } = products.find(
-    product => product.id === productIdFromUrlParams
-  ) as Product;
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(
+        `/api/products/${productIdFromUrlParams}`
+      );
 
-  const totalProductStock = countInStock
+      setProduct(data);
+    };
+    fetchProduct();
+  }, [productIdFromUrlParams]);
+
+  const totalProductStock = product?.countInStock
     .map(({ stock }) => stock)
     .reduce((acc, cur) => acc + cur, 0);
 
   const availableQuantitiesForEachSize = Object.fromEntries(
-    countInStock.map(el => [el.size, el.stock])
+    product?.countInStock?.map(el => [el.size, el.stock]) ?? []
   );
 
   const quantityForSelectedSize = Object.entries(
@@ -52,7 +60,7 @@ const ProductDetailsPage = () => {
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [
     createData('Quantity:', selectedQuantity as number),
-    createData('In stock;', totalProductStock),
+    createData('In stock;', totalProductStock as number),
   ];
 
   useEffect(() => {
@@ -69,12 +77,12 @@ const ProductDetailsPage = () => {
         </Tooltip>
       </TooltipContainer>
       <ProductImageContainer>
-        <ProductImage src={image} alt={name} />
+        <ProductImage src={product?.image} alt={product?.name} />
       </ProductImageContainer>
 
       <SummaryContainer>
-        <Typography variant='h5' color='inherit' children={name} />
-        <Typography variant='h5' color='inherit' children={price} />
+        <Typography variant='h5' color='inherit' children={product?.name} />
+        <Typography variant='h5' color='inherit' children={product?.price} />
         <SummaryCard variant='outlined'>
           <CardContent>
             <TableContainer>
@@ -128,7 +136,7 @@ const ProductDetailsPage = () => {
                   }
                   label='Size'
                 >
-                  {countInStock.map(({ size }) => (
+                  {product?.countInStock?.map(({ size }) => (
                     <MenuItem key={size} value={size}>
                       {size}
                     </MenuItem>
@@ -179,7 +187,7 @@ const ProductDetailsPage = () => {
         <StyledDescription
           variant='body1'
           color='inherit'
-          children={description}
+          children={product?.description}
         />
       </SummaryContainer>
     </ProductDetailsContainer>
