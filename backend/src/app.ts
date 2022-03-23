@@ -1,15 +1,11 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import products from './data/products.js';
+import { products } from './data/products';
 import { Product } from './types/types';
 
 dotenv.config();
 
 const app: Application = express();
-
-app.get('/api', (req: Request, res: Response, next: NextFunction) => {
-  res.send('Hello');
-});
 
 app.get('/api/products', (req: Request, res: Response, next: NextFunction) => {
   res.json(products);
@@ -29,7 +25,5 @@ app.get(
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () =>
-  console.log(
-    `Server running in in ${process.env.NODE_ENV} mode on port ${PORT}`
-  )
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
