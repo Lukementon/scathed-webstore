@@ -24,7 +24,7 @@ const ProductCard: React.FC<Product> = ({
   price,
   description,
   countInStock,
-  id,
+  _id,
 }) => {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const classes = useSelectStyles();
@@ -40,7 +40,7 @@ const ProductCard: React.FC<Product> = ({
           variant='h6'
           color='inherit'
           children={name}
-          onClick={() => redirectToProductDetailsPage(id)}
+          onClick={() => redirectToProductDetailsPage(_id)}
         />
         <Typography variant='body2' color='primary' children={category} />
       </StyledProductHeader>

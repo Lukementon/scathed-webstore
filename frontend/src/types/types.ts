@@ -4,7 +4,7 @@ interface CountInStock {
 }
 
 export interface Product {
-  id: string;
+  _id: string;
   name: string;
   image: string;
   description: string;

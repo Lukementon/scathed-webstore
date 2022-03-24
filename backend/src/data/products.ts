@@ -1,6 +1,5 @@
 export const products = [
   {
-    id: '1',
     name: 'Deceit Black Tshirt',
     image: '/img/deceit_black_tshirt.jpeg',
     description:
@@ -16,7 +15,6 @@ export const products = [
     ],
   },
   {
-    id: '2',
     name: 'Deceit Burgundy Tshirt',
     image: '/img/deceit_burgundy_tshirt.jpeg',
     description:
@@ -32,7 +30,6 @@ export const products = [
     ],
   },
   {
-    id: '3',
     name: 'Deceit pink Tshirt',
     image: '/img/deceit_pink_tshirt.jpeg',
     description:
@@ -48,7 +45,6 @@ export const products = [
     ],
   },
   {
-    id: '4',
     name: 'Where Truth Occurs White Tshirt',
     image: '/img/truth_white_tshirt.jpeg',
     description: 'Where truth occurs Tshirt with album artwork',
@@ -63,7 +59,6 @@ export const products = [
     ],
   },
   {
-    id: '5',
     name: 'Scathed Charcoal Hat',
     image: '/img/scathed_charcoal_hat.jpeg',
     description: 'Scathed charcoal beanie',
@@ -72,7 +67,6 @@ export const products = [
     countInStock: [{ size: 'Single', stock: 2 }],
   },
   {
-    id: '6',
     name: 'Scathed Cream Hat',
     image: '/img/scathed_cream_hat.jpeg',
     description: 'Scathed cream beanie',
@@ -81,7 +75,6 @@ export const products = [
     countInStock: [{ size: 'Single', stock: 6 }],
   },
   {
-    id: '7',
     name: 'Scathed Pink Hat',
     image: '/img/scathed_pink_hat.jpeg',
     description: 'Scathed pink beanie',
@@ -90,7 +83,6 @@ export const products = [
     countInStock: [{ size: 'Single', stock: 9 }],
   },
   {
-    id: '8',
     name: 'Scathed Rust Hat',
     image: '/img/scathed_rust_hat.jpeg',
     description: 'Scathed rust beanie',
@@ -99,7 +91,6 @@ export const products = [
     countInStock: [{ size: 'Single', stock: 5 }],
   },
   {
-    id: '9',
     name: 'Where truth occurs EP',
     image: '/img/scathed_where_truth_occurs.jpeg',
     description:

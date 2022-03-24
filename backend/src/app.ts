@@ -1,11 +1,13 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
+import connectDB from './config/db';
 import dotenv from 'dotenv';
 import { products } from './data/products';
-import { Product } from './types/types';
 
 dotenv.config();
 
 const app: Application = express();
+
+connectDB();
 
 app.get('/api/products', (req: Request, res: Response, next: NextFunction) => {
   res.json(products);
@@ -15,7 +17,7 @@ app.get(
   '/api/products/:id',
   (req: Request, res: Response, next: NextFunction) => {
     const product = products.find(
-      (product: Product) => product.id === req.params.id
+      (product: any) => product._id === req.params.id
     );
 
     res.json(product);
