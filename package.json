@@ -9,7 +9,10 @@
     "server": "nodemon ./backend/src/app.ts",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "tsc -p ./backend"
+    "build": "tsc -p ./backend",
+    "data:import": "node backend/src/scripts/seeder",
+    "data:destroy": "node backend/src/scripts/seeder -d",
+    "demo": "node backend/src/scripts/demo"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +21,7 @@
     "colors": "^1.4.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
     "mongoose": "^6.2.8"
   },
   "devDependencies": {
