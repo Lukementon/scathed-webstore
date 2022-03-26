@@ -1,24 +1,13 @@
 import styled from 'styled-components';
 import ProductCard from '../components/ProductCard';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Product } from '../types/types';
+import useGetAllProducts from '../hooks/products/useGetAllProducts';
 
 const HomePage = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get('/api/products');
-
-      setProducts(data);
-    };
-    fetchProducts();
-  }, [setProducts]);
+  const { products } = useGetAllProducts();
 
   return (
     <HomePageContainer>
-      {products.map(
+      {products?.map(
         ({ name, image, category, price, description, countInStock, _id }) => (
           <ProductCard
             key={name}
