@@ -1,14 +1,22 @@
 import styled from 'styled-components';
-import ProductLoader from '../components/@scathed-ui/ProductLoader';
+import Alert from '../components/@scathed-ui/alert/Alert';
+import ProductLoader from '../components/@scathed-ui/loading/ProductLoader';
 import ProductCard from '../components/ProductCard';
 import useGetAllProducts from '../hooks/products/useGetAllProducts';
 
 const HomePage = () => {
-  const { products, loading } = useGetAllProducts();
+  const { products, productsLoading, productsError } = useGetAllProducts();
 
   return (
     <HomePageContainer>
-      {loading && <ProductLoader />}
+      {productsLoading && <ProductLoader />}
+      {productsError && (
+        <Alert
+          severity='error'
+          variant='filled'
+          message={productsError as string}
+        />
+      )}
       {products?.map(
         ({ name, image, category, price, description, countInStock, _id }) => (
           <ProductCard

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import EmptyState from './emptyState/EmptyState';
+import EmptyState from '../emptyState/EmptyState';
 const ProductLoader = () => {
   return (
     <Container>

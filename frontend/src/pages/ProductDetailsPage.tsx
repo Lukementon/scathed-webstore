@@ -16,15 +16,15 @@ import {
   Typography,
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import Alert from '../components/@scathed-ui/alert/Alert';
+import ProductLoader from '../components/@scathed-ui/loading/ProductLoader';
+import useSingleProduct from '../hooks/products/useSingleProduct';
 import { useSelectStyles } from '../hooks/styles/themes';
-import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
-  const [product, setProduct] = useState<Product>();
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
@@ -32,18 +32,11 @@ const ProductDetailsPage = () => {
   const navigate = useNavigate();
   const classes = useSelectStyles();
   const params = useParams();
-  const productIdFromUrlParams = params.id;
+  const productIdFromUrlParams = params.id ?? '';
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(
-        `/api/products/${productIdFromUrlParams}`
-      );
-
-      setProduct(data);
-    };
-    fetchProduct();
-  }, [productIdFromUrlParams]);
+  const { product, productLoading, productError } = useSingleProduct(
+    productIdFromUrlParams
+  );
 
   const totalProductStock = product?.countInStock
     .map(({ stock }) => stock)
@@ -76,6 +69,14 @@ const ProductDetailsPage = () => {
           <StyledGoBackIcon fontSize='large' onClick={() => navigate('/')} />
         </Tooltip>
       </TooltipContainer>
+      {productLoading && <ProductLoader />}
+      {productError && (
+        <Alert
+          severity='error'
+          variant='filled'
+          message={productError as string}
+        />
+      )}
       <ProductImageContainer>
         <ProductImage src={product?.image} alt={product?.name} />
       </ProductImageContainer>

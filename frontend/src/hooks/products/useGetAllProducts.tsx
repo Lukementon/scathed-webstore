@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
-import { GET_PRODUCTS_ROUTE } from '../../constants/routes';
 import { Product } from '../../types/types';
 
 const useGetAllProducts = () => {
@@ -9,31 +8,29 @@ const useGetAllProducts = () => {
   const [productsError, setProductsError] = useState<Error | unknown>();
 
   useEffect(() => {
-    try {
-      (async () => {
-        const { data: products } = await axios.get(GET_PRODUCTS_ROUTE);
-
+    (async () => {
+      try {
+        const { data: products } = await axios.get('/api/products');
         setProductsLoading(true);
         setProductsState(products);
         setProductsLoading(false);
-      })();
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        setProductsError(error?.message);
+      } catch (error) {
+        if (error instanceof Error) {
+          setProductsError('An error occured while fetching products');
+          setProductsLoading(false);
+          return;
+        }
+        setProductsError(error);
         setProductsLoading(false);
-        return;
       }
-      setProductsError(error);
-      setProductsLoading(false);
-    }
+    })();
   }, []);
 
   return useMemo(
     () => ({
       products: productsState,
-      loading: productsLoading,
-      error: productsError,
+      productsLoading,
+      productsError,
     }),
     [productsState, productsLoading, productsError]
   );
