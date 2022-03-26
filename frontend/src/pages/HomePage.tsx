@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import ProductLoader from '../components/@scathed-ui/ProductLoader';
 import ProductCard from '../components/ProductCard';
 import useGetAllProducts from '../hooks/products/useGetAllProducts';
 
 const HomePage = () => {
-  const { products } = useGetAllProducts();
+  const { products, loading } = useGetAllProducts();
 
   return (
     <HomePageContainer>
+      {loading && <ProductLoader />}
       {products?.map(
         ({ name, image, category, price, description, countInStock, _id }) => (
           <ProductCard
@@ -28,6 +30,7 @@ const HomePage = () => {
 export default HomePage;
 
 const HomePageContainer = styled.div`
+  min-height: 80vh;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-column-gap: 5rem;
