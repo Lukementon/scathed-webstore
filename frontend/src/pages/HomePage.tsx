@@ -1,10 +1,14 @@
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
 import ProductLoader from '../@scathed-ui/loading/ProductLoader';
 import ProductCard from '../components/ProductCard';
 import useGetAllProducts from '../hooks/products/useGetAllProducts';
+import { shoppingCartState } from '../state/products/cart';
+import { Product } from '../types/types';
 
 const HomePage = () => {
+  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
   const { products, productsLoading, productsError } = useGetAllProducts();
 
   return (
@@ -17,20 +21,14 @@ const HomePage = () => {
           message={productsError as string}
         />
       )}
-      {products?.map(
-        ({ name, image, category, price, description, countInStock, _id }) => (
-          <ProductCard
-            key={name}
-            _id={_id}
-            name={name}
-            category={category}
-            price={price}
-            image={image}
-            description={description}
-            countInStock={countInStock}
-          />
-        )
-      )}
+      {products?.map((product: Product) => (
+        <ProductCard
+          key={product._id}
+          product={product}
+          shoppingCart={shoppingCart}
+          setShoppingCart={setShoppingCart}
+        />
+      ))}
     </HomePageContainer>
   );
 };

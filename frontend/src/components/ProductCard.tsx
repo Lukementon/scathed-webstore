@@ -10,28 +10,84 @@ import {
   Select,
   Typography,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SetterOrUpdater } from 'recoil';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
+import { ShoppingCartItem } from '../state/products/cart';
 import { Product } from '../types/types';
 import { truncateString } from '../utils/text';
 
-const ProductCard: React.FC<Product> = ({
-  name,
-  image,
-  category,
-  price,
-  description,
-  countInStock,
-  _id,
+interface Props {
+  product: Product;
+  shoppingCart: ShoppingCartItem[];
+  setShoppingCart: SetterOrUpdater<ShoppingCartItem[]>;
+}
+
+const ProductCard: React.FC<Props> = ({
+  product,
+  shoppingCart,
+  setShoppingCart,
 }) => {
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
+  const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
+
+  const disabledAddToCartButton = !selectedSize || !selectedQuantity;
+
+  const { _id, category, countInStock, description, image, name, price } =
+    product;
+
+  const availableQuantitiesForEachSize = Object.fromEntries(
+    countInStock?.map(el => [el.size, el.stock]) ?? []
+  );
+
+  const quantityForSelectedSize = Object.entries(
+    availableQuantitiesForEachSize
+  ).find(key => key[0] === selectedSize)?.[1];
+
   const classes = useSelectStyles();
   const navigate = useNavigate();
 
   const redirectToProductDetailsPage = (id: string) =>
     navigate(`/product/${id}`);
+
+  const addItemToShoppingCart = useCallback(
+    (product: Product, size: string, quantity: string | number) => {
+      const newProduct = {
+        product,
+        size,
+        quantity,
+      };
+
+      const productExistsInCart = shoppingCart.find(
+        (item: ShoppingCartItem) =>
+          item.product._id === product._id && item.size === size
+      );
+
+      if (productExistsInCart) {
+        setShoppingCart(
+          shoppingCart.map((cartItem: ShoppingCartItem) =>
+            cartItem.product._id === newProduct.product._id &&
+            cartItem.size === newProduct.size
+              ? newProduct
+              : cartItem
+          ) as ShoppingCartItem[]
+        );
+        return;
+      }
+
+      setShoppingCart([...shoppingCart, newProduct as ShoppingCartItem]);
+    },
+    [shoppingCart, setShoppingCart]
+  );
+
+  useEffect(() => {
+    setQuantityArray(
+      Array.from({ length: quantityForSelectedSize as number }, (_, i) => i + 1)
+    );
+  }, [quantityForSelectedSize]);
 
   return (
     <StyledProductCard>
@@ -54,41 +110,85 @@ const ProductCard: React.FC<Product> = ({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <StyledFormControl variant='outlined'>
-          <InputLabel
-            className={classes.root}
-            id='demo-simple-select-outlined-label'
-          >
-            Size
-          </InputLabel>
-          <Select
-            className={classes.select}
-            inputProps={{
-              classes: {
-                icon: classes.icon,
-                root: classes.root,
-              },
-            }}
-            variant='outlined'
-            color='primary'
-            labelId='demo-simple-select-outlined-label'
-            id='demo-simple-select-outlined'
-            value={selectedSize}
-            onChange={(
-              e: React.ChangeEvent<{ name?: string; value: unknown }>
-            ) => setSelectedSize(e.target.value as string)}
-            label='Size'
-          >
-            {countInStock.map(({ size }) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </Select>
-          <AddToCartButton variant='outlined' color='secondary'>
-            Add to cart
-          </AddToCartButton>
-        </StyledFormControl>
+        <FormContainer>
+          <StyledFormControl variant='outlined'>
+            <InputLabel
+              className={classes.root}
+              id='demo-simple-select-outlined-label'
+            >
+              Size
+            </InputLabel>
+            <Select
+              className={classes.select}
+              inputProps={{
+                classes: {
+                  icon: classes.icon,
+                  root: classes.root,
+                },
+              }}
+              variant='outlined'
+              color='primary'
+              labelId='demo-simple-select-outlined-label'
+              id='demo-simple-select-outlined'
+              value={selectedSize}
+              onChange={(
+                e: React.ChangeEvent<{ name?: string; value: unknown }>
+              ) => setSelectedSize(e.target.value as string)}
+              label='Size'
+            >
+              {countInStock.map(({ size }) => (
+                <MenuItem key={size} value={size}>
+                  {size}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+
+          <StyledFormControl variant='outlined'>
+            <InputLabel
+              className={classes.root}
+              id='demo-simple-select-outlined-label'
+            >
+              Quantity
+            </InputLabel>
+            <Select
+              className={classes.select}
+              inputProps={{
+                classes: {
+                  icon: classes.icon,
+                  root: classes.root,
+                },
+              }}
+              disabled={!selectedSize}
+              variant='outlined'
+              color='primary'
+              labelId='demo-simple-select-outlined-label'
+              id='demo-simple-select-outlined'
+              value={selectedQuantity}
+              onChange={(e: React.ChangeEvent<{ value: unknown }>) =>
+                setSelectedQuantity(e.target.value as number)
+              }
+              label='Size'
+            >
+              {quantityArray?.map(num => (
+                <MenuItem key={num} value={num}>
+                  {num}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <AddToCartButton
+              onClick={() =>
+                addItemToShoppingCart(product, selectedSize, selectedQuantity)
+              }
+              disabled={disabledAddToCartButton}
+              variant='outlined'
+              color='secondary'
+            >
+              Add to cart
+            </AddToCartButton>
+          </StyledFormControl>
+        </FormContainer>
       </CardActions>
     </StyledProductCard>
   );
@@ -123,11 +223,19 @@ const StyledProductMedia = styled(CardMedia)`
   width: 100%;
 `;
 
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const StyledFormControl = styled(FormControl)`
   && {
     width: 100%;
     margin-right: auto;
     margin-left: auto;
+    margin: 0.5rem 0;
+    text-align: left;
   }
 `;
 

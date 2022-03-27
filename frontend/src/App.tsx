@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import styled from 'styled-components';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
@@ -19,17 +20,19 @@ const theme = createTheme({
 const App = () => {
   return (
     <BrowserRouter>
-      <AppContainer>
-        <Header />
-        <Main>
-          <ThemeProvider theme={theme}>
-            <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/product/:id' element={<ProductDetailsPage />} />
-            </Routes>
-          </ThemeProvider>
-        </Main>
-      </AppContainer>
+      <RecoilRoot>
+        <AppContainer>
+          <Header />
+          <Main>
+            <ThemeProvider theme={theme}>
+              <Routes>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/product/:id' element={<ProductDetailsPage />} />
+              </Routes>
+            </ThemeProvider>
+          </Main>
+        </AppContainer>
+      </RecoilRoot>
     </BrowserRouter>
   );
 };

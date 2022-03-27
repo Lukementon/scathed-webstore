@@ -24,7 +24,7 @@ const useSingleProduct = (productId: string) => {
         setProductLoading(false);
       }
     })();
-  }, []);
+  }, [productId]);
 
   return useMemo(
     () => ({

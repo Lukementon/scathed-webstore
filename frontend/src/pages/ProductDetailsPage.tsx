@@ -16,15 +16,20 @@ import {
   Typography,
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
 import ProductLoader from '../@scathed-ui/loading/ProductLoader';
 import useSingleProduct from '../hooks/products/useSingleProduct';
 import { useSelectStyles } from '../hooks/styles/themes';
+import { ShoppingCartItem, shoppingCartState } from '../state/products/cart';
+import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
+  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
@@ -55,6 +60,36 @@ const ProductDetailsPage = () => {
     createData('Quantity:', selectedQuantity as number),
     createData('In stock;', totalProductStock as number),
   ];
+
+  const addItemToShoppingCart = useCallback(
+    (product: Product, size: string, quantity: string | number) => {
+      const newProduct = {
+        product,
+        size,
+        quantity,
+      };
+
+      const productExistsInCart = shoppingCart.find(
+        (item: ShoppingCartItem) =>
+          item.product._id === product._id && item.size === size
+      );
+
+      if (productExistsInCart) {
+        setShoppingCart(
+          shoppingCart.map((cartItem: ShoppingCartItem) =>
+            cartItem.product._id === newProduct.product._id &&
+            cartItem.size === newProduct.size
+              ? newProduct
+              : cartItem
+          ) as ShoppingCartItem[]
+        );
+        return;
+      }
+
+      setShoppingCart([...shoppingCart, newProduct as ShoppingCartItem]);
+    },
+    [shoppingCart, setShoppingCart]
+  );
 
   useEffect(() => {
     setQuantityArray(
@@ -178,7 +213,17 @@ const ProductDetailsPage = () => {
                   ))}
                 </Select>
 
-                <AddToCartButton variant='outlined' color='secondary'>
+                <AddToCartButton
+                  onClick={() =>
+                    addItemToShoppingCart(
+                      product as Product,
+                      selectedSize,
+                      selectedQuantity
+                    )
+                  }
+                  variant='outlined'
+                  color='secondary'
+                >
                   Add to cart
                 </AddToCartButton>
               </StyledFormControl>
