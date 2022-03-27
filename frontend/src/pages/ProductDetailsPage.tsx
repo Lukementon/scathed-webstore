@@ -19,8 +19,8 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import Alert from '../components/@scathed-ui/alert/Alert';
-import ProductLoader from '../components/@scathed-ui/loading/ProductLoader';
+import Alert from '../@scathed-ui/alert/Alert';
+import ProductLoader from '../@scathed-ui/loading/ProductLoader';
 import useSingleProduct from '../hooks/products/useSingleProduct';
 import { useSelectStyles } from '../hooks/styles/themes';
 

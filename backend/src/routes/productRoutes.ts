@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
+import ErrorResponse from '../utils/errorResponse';
 import asyncHandler from 'express-async-handler';
 import Product from '../schemas/product';
 
@@ -27,12 +28,13 @@ router.get(
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const product = await Product.findById(req.params.id);
 
-      if (product) {
-        res.json(product);
-      } else {
-        res.status(404);
-        throw new Error('Product not found');
+      if (!product) {
+        return next(
+          new ErrorResponse(`Product not found with ID ${req.params.id}`, 404)
+        );
       }
+
+      res.status(200).json({ success: true, data: product });
     }
   )
 );

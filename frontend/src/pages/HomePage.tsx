@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Alert from '../components/@scathed-ui/alert/Alert';
-import ProductLoader from '../components/@scathed-ui/loading/ProductLoader';
+import Alert from '../@scathed-ui/alert/Alert';
+import ProductLoader from '../@scathed-ui/loading/ProductLoader';
 import ProductCard from '../components/ProductCard';
 import useGetAllProducts from '../hooks/products/useGetAllProducts';
 
