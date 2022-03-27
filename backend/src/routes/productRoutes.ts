@@ -34,7 +34,7 @@ router.get(
         );
       }
 
-      res.status(200).json({ success: true, data: product });
+      res.status(200).json(product);
     }
   )
 );
