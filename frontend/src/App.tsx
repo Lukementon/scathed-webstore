@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import ShoppingCartPage from './pages/ShoppingCartPage';
 
 const theme = createTheme({
   palette: {
@@ -28,6 +29,7 @@ const App = () => {
               <Routes>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/product/:id' element={<ProductDetailsPage />} />
+                <Route path='/cart' element={<ShoppingCartPage />} />
               </Routes>
             </ThemeProvider>
           </Main>

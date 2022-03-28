@@ -10,41 +10,29 @@ import { ShoppingCart } from '@material-ui/icons';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import React, { useState } from 'react';
-import emblem from '../img/emblem.png';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { shoppingCartState, ShoppingCartItem } from '../state/products/cart';
+import styled from 'styled-components';
+import emblem from '../img/emblem.png';
+import { shoppingCartState } from '../state/products/cart';
 
 const USER_ACCOUNT_MENU_ID = 'primary-search-account-menu';
 const MOBILE_MENU_ID = 'primary-search-account-menu-mobile';
-const SHOPPING_CART_MENU_ID = 'primary-search-shopping-cart-menu';
 
 const Header = () => {
-  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+  const [shoppingCart] = useRecoilState(shoppingCartState);
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  const [shoppingCartAnchorEl, setShoppingCartAnchorEl] =
-    useState<null | HTMLElement>(null);
+
+  const navigate = useNavigate();
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
     setMobileMoreAnchorEl(event.currentTarget);
-
-  const isShoppingCartMenuOpen = Boolean(shoppingCartAnchorEl);
-  const handleShoppingCartMenuClose = () => setShoppingCartAnchorEl(null);
-  const handleShoppingCartMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    if (!shoppingCart.length) return;
-    setShoppingCartAnchorEl(event.currentTarget);
-  };
-
-  const removeProductFromShoppingCart = (product: ShoppingCartItem) => {
-    //
-  };
 
   const renderMobileMenu = (
     <Menu
@@ -78,42 +66,6 @@ const Header = () => {
     </Menu>
   );
 
-  const renderShoppingCartMenu = (
-    <Menu
-      anchorEl={shoppingCartAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={SHOPPING_CART_MENU_ID}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isShoppingCartMenuOpen}
-      onClose={handleShoppingCartMenuClose}
-    >
-      {shoppingCart.map((cartItem: ShoppingCartItem) => (
-        <MenuItem>
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <p>{cartItem.product.name}</p>
-            <IconButton
-              onClick={() => removeProductFromShoppingCart(cartItem)}
-              aria-label='remove this product'
-              aria-controls='primary-search-shopping-cart-menu'
-              aria-haspopup='true'
-              color='inherit'
-            >
-              <ClearIcon />
-            </IconButton>
-          </div>
-        </MenuItem>
-      ))}
-    </Menu>
-  );
-
   return (
     <>
       <StyledAppBar position='sticky'>
@@ -144,7 +96,7 @@ const Header = () => {
               <IconButton
                 aria-label='show 4 new cart items'
                 color='inherit'
-                onClick={handleShoppingCartMenuOpen}
+                onClick={() => navigate('/cart')}
               >
                 <Badge badgeContent={shoppingCart.length} color='secondary'>
                   <ShoppingCart />
@@ -175,7 +127,6 @@ const Header = () => {
           </HeaderRight>
         </StyledToolbar>
       </StyledAppBar>
-      {renderShoppingCartMenu}
       {renderMobileMenu}
     </>
   );
