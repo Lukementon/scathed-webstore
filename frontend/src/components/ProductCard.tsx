@@ -10,10 +10,11 @@ import {
   Select,
   Typography,
 } from '@material-ui/core';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SetterOrUpdater } from 'recoil';
 import styled from 'styled-components';
+import useGetQuantityForSpecificItemSize from '../hooks/products/useGetQuantityForSpecificItemSize';
 import { useSelectStyles } from '../hooks/styles/themes';
 import { ShoppingCartItem } from '../state/products/cart';
 import { Product } from '../types/types';
@@ -31,7 +32,6 @@ const ProductCard: React.FC<Props> = ({
   setShoppingCart,
 }) => {
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
 
   const disabledAddToCartButton = !selectedSize || !selectedQuantity;
@@ -39,16 +39,12 @@ const ProductCard: React.FC<Props> = ({
   const { _id, category, countInStock, description, image, name, price } =
     product;
 
-  const availableQuantitiesForEachSize = Object.fromEntries(
-    countInStock?.map(el => [el.size, el.stock]) ?? []
-  );
-
-  const quantityForSelectedSize = Object.entries(
-    availableQuantitiesForEachSize
-  ).find(key => key[0] === selectedSize)?.[1];
-
   const classes = useSelectStyles();
   const navigate = useNavigate();
+  const quantityArray = useGetQuantityForSpecificItemSize(
+    countInStock,
+    selectedSize
+  );
 
   const redirectToProductDetailsPage = (id: string) =>
     navigate(`/product/${id}`);
@@ -82,12 +78,6 @@ const ProductCard: React.FC<Props> = ({
     },
     [shoppingCart, setShoppingCart]
   );
-
-  useEffect(() => {
-    setQuantityArray(
-      Array.from({ length: quantityForSelectedSize as number }, (_, i) => i + 1)
-    );
-  }, [quantityForSelectedSize]);
 
   return (
     <StyledProductCard>

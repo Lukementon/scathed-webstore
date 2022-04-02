@@ -1,4 +1,4 @@
-interface CountInStock {
+export interface CountInStock {
   size: string;
   stock: number;
 }

@@ -1,21 +1,12 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { useSelectStyles } from '../hooks/styles/themes';
-import { ShoppingCartItem, shoppingCartState } from '../state/products/cart';
-import { truncateString } from '../utils/text';
+import ShoppingCartItem from '../components/ShoppingCartItem';
+import { shoppingCartState } from '../state/products/cart';
 
 const ShoppingCartPage = () => {
-  const [shoppingCart] = useRecoilState(shoppingCartState);
+  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
 
-  const classes = useSelectStyles();
   return (
     <ShoppingCartContainer>
       <ShoppingCartLeft>
@@ -23,47 +14,13 @@ const ShoppingCartPage = () => {
         {!shoppingCart.length && <h3>Your shopping cart is empty</h3>}
 
         <ShoppingCartItems>
-          {shoppingCart.map((cartItem: ShoppingCartItem) => (
-            <ShoppingCartCard elevation={2}>
-              <InnerProductCard>
-                <ProductImage src={cartItem.product.image} />
-                <div>
-                  <h3>{cartItem.product.name}</h3>
-                  <p>{truncateString(cartItem.product.description, 120)}</p>
-                  <ProductModificationButton>
-                    <StyledFormControl variant='outlined'>
-                      <InputLabel
-                        className={classes.root}
-                        id='demo-simple-select-outlined-label'
-                      >
-                        Qty
-                      </InputLabel>
-                      <Select
-                        className={classes.select}
-                        inputProps={{
-                          classes: {
-                            icon: classes.icon,
-                            root: classes.root,
-                          },
-                        }}
-                        variant='outlined'
-                        color='primary'
-                        labelId='demo-simple-select-outlined-label'
-                        id='demo-simple-select-outlined'
-                        label='Size'
-                      >
-                        {cartItem.product.countInStock?.map(({ stock }) => (
-                          <MenuItem key={stock} value={stock}>
-                            {stock}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </StyledFormControl>
-                    <p>Delete</p>
-                  </ProductModificationButton>
-                </div>
-              </InnerProductCard>
-            </ShoppingCartCard>
+          {shoppingCart.map(cartItem => (
+            <ShoppingCartItem
+              key={cartItem.product._id + cartItem.size}
+              cartItem={cartItem}
+              shoppingCart={shoppingCart}
+              setShoppingCart={setShoppingCart}
+            />
           ))}
         </ShoppingCartItems>
       </ShoppingCartLeft>
@@ -101,50 +58,6 @@ const ShoppingCartLeft = styled.div`
 
 const ShoppingCartItems = styled.div`
   width: 100%;
-`;
-
-const ShoppingCartCard = styled(Paper)`
-  && {
-    background-color: #363636;
-    color: white;
-    width: 100%;
-    margin: 1.5rem 0;
-    padding: 1rem;
-  }
-`;
-
-const InnerProductCard = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-`;
-
-const ProductImage = styled.img`
-  width: 10%;
-  object-fit: contain;
-  margin-right: 2rem;
-`;
-
-const ProductModificationButton = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-
-  > p {
-    cursor: pointer;
-    :hover {
-      text-decoration: underline;
-      color: #c5c5c5;
-    }
-  }
-`;
-
-const StyledFormControl = styled(FormControl)`
-  && {
-    width: 10%;
-    margin-right: 1rem;
-    text-align: left;
-  }
 `;
 
 const ShoppingCartRight = styled.div`

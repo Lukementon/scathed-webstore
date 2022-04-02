@@ -16,24 +16,19 @@ import {
   Typography,
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
 import ProductLoader from '../@scathed-ui/loading/ProductLoader';
+import useGetQuantityForSpecificItemSize from '../hooks/products/useGetQuantityForSpecificItemSize';
 import useSingleProduct from '../hooks/products/useSingleProduct';
 import { useSelectStyles } from '../hooks/styles/themes';
 import { ShoppingCartItem, shoppingCartState } from '../state/products/cart';
 import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
-  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
-
-  const [selectedSize, setSelectedSize] = useState<string>('');
-  const [quantityArray, setQuantityArray] = useState<number[] | undefined>();
-  const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
-
   const navigate = useNavigate();
   const classes = useSelectStyles();
   const params = useParams();
@@ -42,18 +37,19 @@ const ProductDetailsPage = () => {
   const { product, productLoading, productError } = useSingleProduct(
     productIdFromUrlParams
   );
+  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+
+  const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
+
+  const quantityArray = useGetQuantityForSpecificItemSize(
+    product?.countInStock ?? [],
+    selectedSize
+  );
 
   const totalProductStock = product?.countInStock
     .map(({ stock }) => stock)
     .reduce((acc, cur) => acc + cur, 0);
-
-  const availableQuantitiesForEachSize = Object.fromEntries(
-    product?.countInStock?.map(el => [el.size, el.stock]) ?? []
-  );
-
-  const quantityForSelectedSize = Object.entries(
-    availableQuantitiesForEachSize
-  ).find(key => key[0] === selectedSize)?.[1];
 
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [
@@ -90,12 +86,6 @@ const ProductDetailsPage = () => {
     },
     [shoppingCart, setShoppingCart]
   );
-
-  useEffect(() => {
-    setQuantityArray(
-      Array.from({ length: quantityForSelectedSize as number }, (_, i) => i + 1)
-    );
-  }, [quantityForSelectedSize]);
 
   return (
     <ProductDetailsContainer>
