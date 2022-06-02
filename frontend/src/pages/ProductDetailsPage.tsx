@@ -213,6 +213,7 @@ const ProductDetailsPage = () => {
                   }
                   variant='outlined'
                   color='secondary'
+                  disabled={!selectedSize || !selectedQuantity}
                 >
                   Add to cart
                 </AddToCartButton>

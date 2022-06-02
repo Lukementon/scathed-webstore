@@ -1,11 +1,18 @@
 import { Button } from '@material-ui/core';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import ShoppingCartItem from '../components/ShoppingCartItem';
 import { shoppingCartState } from '../state/products/cart';
 
 const ShoppingCartPage = () => {
+  const navigate = useNavigate();
   const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+
+  useEffect(() => {
+    if (!shoppingCart.length) navigate('/');
+  }, [navigate, shoppingCart]);
 
   return (
     <ShoppingCartContainer>

@@ -24,7 +24,6 @@ const ShoppingCartItem: React.FC<Props> = ({
   shoppingCart,
   setShoppingCart,
 }) => {
-  console.log('----SHOPPING CART----', shoppingCart);
   const quantityArray = useGetQuantityForSpecificItemSize(
     cartItem.product.countInStock,
     cartItem.size
@@ -53,12 +52,24 @@ const ShoppingCartItem: React.FC<Props> = ({
             cartItem.size === productExistsInCart.size
               ? { ...productExistsInCart, quantity: selectedQuantity }
               : cartItem
-          ) as CartItemType[]
+          )
         );
       }
       return;
     },
     [cartItem, shoppingCart, setShoppingCart]
+  );
+
+  const removeItemFromShoppingCart = useCallback(
+    (itemId: string, itemSize: string) => {
+      const indexOfItemToRemove = shoppingCart.findIndex(
+        item => item.product._id === itemId && item.size === itemSize
+      );
+      setShoppingCart(
+        shoppingCart.filter((_, index) => index !== indexOfItemToRemove)
+      );
+    },
+    [shoppingCart, setShoppingCart]
   );
 
   return (
@@ -102,7 +113,13 @@ const ShoppingCartItem: React.FC<Props> = ({
                 ))}
               </Select>
             </StyledFormControl>
-            <p>Delete</p>
+            <p
+              onClick={() =>
+                removeItemFromShoppingCart(cartItem.product._id, cartItem.size)
+              }
+            >
+              Delete
+            </p>
           </ProductModificationContainer>
         </ProductDetailsContainer>
       </InnerProductCard>

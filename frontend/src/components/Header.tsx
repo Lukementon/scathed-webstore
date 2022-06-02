@@ -74,7 +74,7 @@ const Header = () => {
             <IconButton edge='start' color='inherit' aria-label='open drawer'>
               <MenuIcon />
             </IconButton>
-            <StyledTypography variant='h6' noWrap>
+            <StyledTypography variant='h6' noWrap onClick={() => navigate('/')}>
               Scathed Webstore
             </StyledTypography>
 
@@ -94,9 +94,10 @@ const Header = () => {
           <HeaderRight>
             <StyledOptionsContainer>
               <IconButton
+                disabled={!shoppingCart.length}
+                onClick={() => navigate('/cart')}
                 aria-label='show 4 new cart items'
                 color='inherit'
-                onClick={() => navigate('/cart')}
               >
                 <Badge badgeContent={shoppingCart.length} color='secondary'>
                   <ShoppingCart />
@@ -150,6 +151,7 @@ const HeaderLeft = styled.div`
 `;
 
 const StyledTypography = styled(Typography)`
+  cursor: pointer;
   && {
     display: inline-block;
 
