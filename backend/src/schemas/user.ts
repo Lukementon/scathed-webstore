@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+interface UserDocument extends mongoose.Document {
+  name: string;
+  email: string;
+  avatar?: string;
+  password?: string;
+  isAdmin?: boolean;
+}
+
 const UserSchema = new mongoose.Schema(
   {
     name: {
@@ -11,13 +19,14 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    avatar: {
+      type: String,
+    },
     password: {
       type: String,
-      required: true,
     },
     isAdmin: {
       type: Boolean,
-      required: true,
       default: false,
     },
   },
@@ -26,6 +35,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model<UserDocument>('User', UserSchema);
 
 export default User;

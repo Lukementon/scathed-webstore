@@ -7,6 +7,8 @@ import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
+import { gapi } from 'gapi-script';
+import { useEffect } from 'react';
 
 const theme = createTheme({
   palette: {
@@ -20,10 +22,20 @@ const theme = createTheme({
 });
 
 const App = () => {
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: '',
+        scope: '',
+      });
+    }
+    gapi.load('client:auth2', start);
+  }, []);
   return (
     <BrowserRouter>
       <RecoilRoot>
         <AppContainer>
+          ;
           <Header />
           <Main>
             <ThemeProvider theme={theme}>

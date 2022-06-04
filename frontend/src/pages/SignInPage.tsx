@@ -6,16 +6,45 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import React, { useCallback } from 'react';
+import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
+
+interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  isAdmin?: boolean;
+  password?: string;
+}
 
 const SignInPage: React.FC = () => {
   const classes = useSelectStyles();
 
-  const handleLogin = useCallback(async () => {
-    console.log('logging in');
+  const onSuccess = useCallback(async (res: any) => {
+    try {
+      const result: AxiosResponse<AuthResponse> = await axios.post(
+        '/api/auth/',
+        {
+          token: res?.tokenId,
+          name: 'LUKE MENTON',
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const onFailure = useCallback((res: any) => {
+    console.log('failed', res);
   }, []);
 
   return (
@@ -47,13 +76,11 @@ const SignInPage: React.FC = () => {
             </Typography>
             <StyledDivider orientation='horizontal' />
           </DividerSection>
-          <SignInButton
-            variant='outlined'
-            color='secondary'
-            onClick={handleLogin}
-          >
-            Sign in with Google
-          </SignInButton>
+          <GoogleLogin
+            clientId='198030412686-r0sbk82tcl7cjjkvtngegs8vs5usvh82.apps.googleusercontent.com'
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+          />
         </GoogleSection>
       </SignInCard>
     </SignInContainer>

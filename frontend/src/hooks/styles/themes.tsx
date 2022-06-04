@@ -4,9 +4,6 @@ export const useSelectStyles = makeStyles({
   input: {
     color: 'white',
   },
-  divider: {
-    color: 'white',
-  },
   select: {
     '&:before': {
       borderColor: 'white',
