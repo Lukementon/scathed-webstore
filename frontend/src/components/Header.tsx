@@ -110,7 +110,11 @@ const Header = () => {
                 aria-haspopup='true'
                 color='inherit'
               >
-                <AccountCircle />
+                {true ? (
+                  <SignIn onClick={() => navigate('/signin')}>Sign in</SignIn>
+                ) : (
+                  <AccountCircle onClick={() => navigate('/signin')} />
+                )}
               </IconButton>
             </StyledOptionsContainer>
 
@@ -231,4 +235,11 @@ const StyledMoreButtonContainer = styled.div`
   @media (max-width: 850px) {
     display: inline-block;
   }
+`;
+
+const SignIn = styled.div`
+font-size: 1rem;
+  cursor: pointer;
+  :hover {
+      text-decoration: underline;
 `;

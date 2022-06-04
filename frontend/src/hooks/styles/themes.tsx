@@ -1,6 +1,12 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useSelectStyles = makeStyles({
+  input: {
+    color: 'white',
+  },
+  divider: {
+    color: 'white',
+  },
   select: {
     '&:before': {
       borderColor: 'white',

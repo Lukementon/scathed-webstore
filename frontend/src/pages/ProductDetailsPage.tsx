@@ -40,7 +40,7 @@ const ProductDetailsPage = () => {
   const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
 
   const [selectedSize, setSelectedSize] = useState<string>('');
-  const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
+  const [selectedQuantity, setSelectedQuantity] = useState<number | string>(0);
 
   const quantityArray = useGetQuantityForSpecificItemSize(
     product?.countInStock ?? [],
@@ -52,10 +52,7 @@ const ProductDetailsPage = () => {
     .reduce((acc, cur) => acc + cur, 0);
 
   const createData = (name: string, count: number) => ({ name, count });
-  const rows = [
-    createData('Quantity:', selectedQuantity as number),
-    createData('In stock;', totalProductStock as number),
-  ];
+  const rows = [createData('In stock:', totalProductStock as number)];
 
   const addItemToShoppingCart = useCallback(
     (product: Product, size: string, quantity: string | number) => {
