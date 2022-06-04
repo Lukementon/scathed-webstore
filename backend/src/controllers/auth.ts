@@ -8,7 +8,6 @@ dotenv.config();
 const googleClient = new OAuth2Client({
   clientId: `${process.env.GOOGLE_CLIENT_ID}`,
 });
-console.log('**** google client', googleClient);
 
 const authenticateUser = async (req: Request, res: Response) => {
   console.log('--- in the auth controller ---', req);

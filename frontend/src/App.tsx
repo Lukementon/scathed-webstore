@@ -25,7 +25,8 @@ const App = () => {
   useEffect(() => {
     function start() {
       gapi.client.init({
-        clientId: '',
+        clientId:
+          '198030412686-r0sbk82tcl7cjjkvtngegs8vs5usvh82.apps.googleusercontent.com',
         scope: '',
       });
     }

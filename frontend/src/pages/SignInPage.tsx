@@ -12,15 +12,6 @@ import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  isAdmin?: boolean;
-  password?: string;
-}
-
 const SignInPage: React.FC = () => {
   const classes = useSelectStyles();
 
