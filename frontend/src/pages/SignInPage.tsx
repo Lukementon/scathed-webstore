@@ -6,16 +6,11 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import React, { useCallback } from 'react';
 import GoogleLogin from 'react-google-login';
 import styled from 'styled-components';
 import { useSelectStyles } from '../hooks/styles/themes';
-
-interface AuthResponse {
-  token: string;
-  user: User;
-}
 
 interface User {
   _id: string;
@@ -31,13 +26,9 @@ const SignInPage: React.FC = () => {
 
   const onSuccess = useCallback(async (res: any) => {
     try {
-      const result: AxiosResponse<AuthResponse> = await axios.post(
-        '/api/auth/',
-        {
-          token: res?.tokenId,
-          name: 'LUKE MENTON',
-        }
-      );
+      await axios.post('/api/auth/', {
+        token: res?.tokenId,
+      });
     } catch (err) {
       console.error(err);
     }
