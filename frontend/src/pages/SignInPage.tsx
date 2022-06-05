@@ -37,11 +37,13 @@ const SignInPage: React.FC = () => {
         </Typography>
         <FormControl>
           <StyledTextField
+            type='email'
             variant='outlined'
             placeholder='Email'
             inputProps={{ className: classes.input }}
           />
           <StyledTextField
+            type='password'
             variant='outlined'
             placeholder='Password'
             inputProps={{ className: classes.input }}
@@ -98,7 +100,7 @@ const StyledTextField = styled(TextField)`
 
 const SignInButton = styled(Button)`
   && {
-    margin: 0.5rem 0;
+    margin-top: 0.5rem;
     padding: 0.5rem 0;
     width: 100%;
   }
@@ -113,6 +115,7 @@ const GoogleSection = styled.div`
 
 const DividerSection = styled.div`
   width: 100%;
+  margin: 1rem 0;
   display: flex;
   align-items: center;
   justify-content: center;

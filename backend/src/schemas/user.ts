@@ -1,14 +1,17 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
+import bcyrpt from 'bcryptjs';
 
-interface UserDocument extends mongoose.Document {
+export interface IUser {
   name: string;
   email: string;
+  isAdmin: boolean;
+  _id?: string;
   avatar?: string;
   password?: string;
-  isAdmin?: boolean;
+  matchPassword?: (enteredPassword: string) => Promise<boolean>;
 }
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -19,15 +22,16 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    isAdmin: {
+      required: true,
+      type: Boolean,
+      default: false,
+    },
     avatar: {
       type: String,
     },
     password: {
       type: String,
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
   },
   {
@@ -35,6 +39,17 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model<UserDocument>('User', UserSchema);
+UserSchema.methods.matchPassword = async function (enteredPassword: string) {
+  return await bcyrpt.compare(enteredPassword, this.password);
+};
 
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  const salt = await bcyrpt.genSalt(10);
+  this.password = await bcyrpt.hash(this.password as string, salt);
+});
+
+const User = model<IUser>('User', UserSchema);
 export default User;
