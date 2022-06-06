@@ -23,7 +23,7 @@ const useGoogleLogin = () => {
           setGoogleLoginError(error.response.data.error);
           console.error(error);
         } else {
-          setGoogleLoginError('Error loggin in');
+          setGoogleLoginError('Error logging in');
           console.error(error);
         }
       }

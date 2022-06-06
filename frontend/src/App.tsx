@@ -9,6 +9,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import RegisterUserPage from './pages/RegisterUserPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
 import SignInPage from './pages/SignInPage';
+import UserDetailsPage from './pages/UserDetailsPage';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,7 @@ const App = () => {
             <Route path='/cart' element={<ShoppingCartPage />} />
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/register' element={<RegisterUserPage />} />
+            <Route path='/user/profile' element={<UserDetailsPage />} />
           </Routes>
         </ThemeProvider>
       </Main>

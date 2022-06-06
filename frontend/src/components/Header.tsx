@@ -113,7 +113,9 @@ const Header = () => {
               >
                 {user?.email ? (
                   <UserInfoContainer>
-                    <TypographyContainer>
+                    <TypographyContainer
+                      onClick={() => navigate(`/user/profile`)}
+                    >
                       <Typography variant='body2'>Hello</Typography>
                       <Typography variant='body2'>{user?.name}</Typography>
                     </TypographyContainer>

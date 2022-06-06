@@ -40,7 +40,7 @@ const useFormLogin = () => {
           setFormLoginError(error.response.data.error);
           console.error(error);
         } else {
-          setFormLoginError('Error loggin in');
+          setFormLoginError('Error logging in');
           console.error(error);
         }
       }
