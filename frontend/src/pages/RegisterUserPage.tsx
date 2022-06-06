@@ -15,37 +15,53 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
-import useFormLogin from '../hooks/auth/useFormLogin';
+import useFormRegistration from '../hooks/auth/useFormRegistration';
 import useGoogleLogin from '../hooks/auth/useGoogleLogin';
 import { useSelectStyles } from '../hooks/styles/themes';
 import { userState } from '../state/user/user';
 
-const SignInPage: React.FC = () => {
+const RegisterUserPage: React.FC = () => {
   const user = useRecoilValue(userState);
-  const [loginEmail, setLoginEmail] = useState<string | undefined>();
-  const [loginPassword, setLoginPassword] = useState<string | undefined>();
+  const [registerName, setRegisterName] = useState<string | undefined>();
+  const [registerEmail, setRegisterEmail] = useState<string | undefined>();
+  const [registerPassword, setRegisterPassword] = useState<
+    string | undefined
+  >();
+  const [confirmRegisterPassword, setConfirmRegisterPassword] = useState<
+    string | undefined
+  >();
+
+  const registrationPasswordsMatch = useMemo(
+    () => registerPassword === confirmRegisterPassword,
+    [registerPassword, confirmRegisterPassword]
+  );
   const isFormLoginSubmitEnabled = useMemo(
-    () => !!loginEmail && !!loginPassword,
-    [loginEmail, loginPassword]
+    () =>
+      !!registerName &&
+      !!registerEmail &&
+      !!registerPassword &&
+      registrationPasswordsMatch,
+    [registerEmail, registerName, registerPassword, registrationPasswordsMatch]
   );
 
   const classes = useSelectStyles();
   const navigate = useNavigate();
   const { googleLoginError, loginWithGoogle, setGoogleLoginError } =
     useGoogleLogin();
-  const { loginWithForm, formLoginError } = useFormLogin();
-  const loginError = useMemo(
-    () => googleLoginError || formLoginError,
-    [googleLoginError, formLoginError]
+  const { registerWithForm, formRegistrationError } = useFormRegistration();
+  const registrationError = useMemo(
+    () => googleLoginError || formRegistrationError,
+    [googleLoginError, formRegistrationError]
   );
 
-  const handleFormLogin = useCallback(async () => {
-    if (loginEmail && loginPassword)
-      await loginWithForm({
-        email: loginEmail,
-        password: loginPassword,
+  const handleFormRegistration = useCallback(async () => {
+    if (registerEmail && registerName && registerPassword)
+      await registerWithForm({
+        email: registerEmail,
+        name: registerName,
+        password: registerPassword,
       });
-  }, [loginEmail, loginPassword, loginWithForm]);
+  }, [registerEmail, registerName, registerPassword, registerWithForm]);
 
   const onSuccess = useCallback(
     async (googleData: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -66,40 +82,53 @@ const SignInPage: React.FC = () => {
   }, [user?.email, navigate]);
 
   return (
-    <SignInContainer>
-      {loginError && (
+    <RegisterContainer>
+      {registrationError && (
         <Alert
           severity='error'
           variant='filled'
-          message={loginError as string}
+          message={registrationError as string}
         />
       )}
-      <SignInCard raised={true}>
+      <RegisterCard raised={true}>
         <Typography variant='body1' color='inherit'>
-          Sign in
+          Register
         </Typography>
         <FormControl>
           <StyledTextField
             variant='outlined'
+            placeholder='Name'
+            inputProps={{ className: classes.input }}
+            onChange={e => setRegisterName(e.target.value)}
+          />
+          <StyledTextField
+            variant='outlined'
             placeholder='Email'
             inputProps={{ className: classes.input }}
-            onChange={e => setLoginEmail(e.target.value)}
+            onChange={e => setRegisterEmail(e.target.value)}
           />
           <StyledTextField
             type='password'
             variant='outlined'
             placeholder='Password'
             inputProps={{ className: classes.input }}
-            onChange={e => setLoginPassword(e.target.value)}
+            onChange={e => setRegisterPassword(e.target.value)}
           />
-          <SignInButton
+          <StyledTextField
+            type='password'
+            variant='outlined'
+            placeholder='Confirm Password'
+            inputProps={{ className: classes.input }}
+            onChange={e => setConfirmRegisterPassword(e.target.value)}
+          />
+          <RegisterButton
             variant='outlined'
             color='secondary'
             disabled={!isFormLoginSubmitEnabled}
-            onClick={handleFormLogin}
+            onClick={handleFormRegistration}
           >
-            Sign in
-          </SignInButton>
+            Register
+          </RegisterButton>
         </FormControl>
         <GoogleSection>
           <DividerSection>
@@ -115,20 +144,14 @@ const SignInPage: React.FC = () => {
             onFailure={onFailure}
           />
         </GoogleSection>
-        <NoAccountSection>
-          <Typography variant='body2'>Dont have an account?</Typography>
-          <Signup variant='body2' onClick={() => navigate('/register')}>
-            Sign up here
-          </Signup>
-        </NoAccountSection>
-      </SignInCard>
-    </SignInContainer>
+      </RegisterCard>
+    </RegisterContainer>
   );
 };
 
-export default SignInPage;
+export default RegisterUserPage;
 
-const SignInContainer = styled.div`
+const RegisterContainer = styled.div`
   min-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -136,7 +159,7 @@ const SignInContainer = styled.div`
   justify-content: center;
 `;
 
-const SignInCard = styled(Card)`
+const RegisterCard = styled(Card)`
   && {
     width: 40%;
     padding: 2rem;
@@ -153,7 +176,7 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const SignInButton = styled(Button)`
+const RegisterButton = styled(Button)`
   && {
     margin-top: 0.5rem;
     padding: 0.5rem 0;
@@ -182,17 +205,5 @@ const StyledDivider = styled(Divider)`
     margin: 0 0.5rem;
     width: 5%;
     background-color: white;
-  }
-`;
-
-const NoAccountSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Signup = styled(Typography)`
-  && {
-    cursor: pointer;
   }
 `;

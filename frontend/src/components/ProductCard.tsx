@@ -74,6 +74,7 @@ const ProductCard: React.FC<Props> = ({
         return;
       }
       setShoppingCart([...shoppingCart, newProduct as ShoppingCartItem]);
+
       return;
     },
     [shoppingCart, setShoppingCart]

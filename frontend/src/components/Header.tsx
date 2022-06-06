@@ -17,18 +17,19 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import emblem from '../img/emblem.png';
 import { shoppingCartState } from '../state/products/cart';
+import { userState } from '../state/user/user';
 
 const USER_ACCOUNT_MENU_ID = 'primary-search-account-menu';
 const MOBILE_MENU_ID = 'primary-search-account-menu-mobile';
 
 const Header = () => {
   const [shoppingCart] = useRecoilState(shoppingCartState);
-
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
+  const [user, setUser] = useRecoilState(userState);
 
   const navigate = useNavigate();
 
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<null | HTMLElement>(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleMobileMenuClose = () => setMobileMoreAnchorEl(null);
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
@@ -110,10 +111,19 @@ const Header = () => {
                 aria-haspopup='true'
                 color='inherit'
               >
-                {true ? (
-                  <SignIn onClick={() => navigate('/signin')}>Sign in</SignIn>
+                {user?.email ? (
+                  <UserInfoContainer>
+                    <TypographyContainer>
+                      <Typography variant='body2'>Hello</Typography>
+                      <Typography variant='body2'>{user?.name}</Typography>
+                    </TypographyContainer>
+
+                    <SignOut onClick={() => setUser(undefined)}>
+                      Sign out
+                    </SignOut>
+                  </UserInfoContainer>
                 ) : (
-                  <AccountCircle onClick={() => navigate('/signin')} />
+                  <SignIn onClick={() => navigate('/signin')}>Sign in</SignIn>
                 )}
               </IconButton>
             </StyledOptionsContainer>
@@ -223,6 +233,15 @@ const HeaderRight = styled.div`
   align-items: center;
 `;
 
+const TypographyContainer = styled.div`
+  margin-right: 1.5rem;
+`;
+
+const UserInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const StyledOptionsContainer = styled.div`
   display: inline-block;
   @media (max-width: 850px) {
@@ -238,8 +257,17 @@ const StyledMoreButtonContainer = styled.div`
 `;
 
 const SignIn = styled.div`
-font-size: 1rem;
+  font-size: 1rem;
   cursor: pointer;
   :hover {
-      text-decoration: underline;
+    text-decoration: underline;
+  }
+`;
+
+const SignOut = styled.div`
+  font-size: 1rem;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
 `;

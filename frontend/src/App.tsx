@@ -1,14 +1,14 @@
 import { createTheme, ThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
-import SignInPage from './pages/SignInPage';
 import Header from './components/Header';
+import useAutoLogin from './hooks/auth/useAutoLogin';
+import useInitGoogleClient from './hooks/auth/useInitGoogleClient';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import RegisterUserPage from './pages/RegisterUserPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
-import { gapi } from 'gapi-script';
-import { useEffect } from 'react';
+import SignInPage from './pages/SignInPage';
 
 const theme = createTheme({
   palette: {
@@ -22,35 +22,24 @@ const theme = createTheme({
 });
 
 const App = () => {
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId:
-          '198030412686-r0sbk82tcl7cjjkvtngegs8vs5usvh82.apps.googleusercontent.com',
-        scope: '',
-      });
-    }
-    gapi.load('client:auth2', start);
-  }, []);
+  useAutoLogin();
+  useInitGoogleClient();
+
   return (
-    <BrowserRouter>
-      <RecoilRoot>
-        <AppContainer>
-          ;
-          <Header />
-          <Main>
-            <ThemeProvider theme={theme}>
-              <Routes>
-                <Route path='/' element={<HomePage />} />
-                <Route path='/product/:id' element={<ProductDetailsPage />} />
-                <Route path='/cart' element={<ShoppingCartPage />} />
-                <Route path='/signin' element={<SignInPage />} />
-              </Routes>
-            </ThemeProvider>
-          </Main>
-        </AppContainer>
-      </RecoilRoot>
-    </BrowserRouter>
+    <AppContainer>
+      <Header />
+      <Main>
+        <ThemeProvider theme={theme}>
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/product/:id' element={<ProductDetailsPage />} />
+            <Route path='/cart' element={<ShoppingCartPage />} />
+            <Route path='/signin' element={<SignInPage />} />
+            <Route path='/register' element={<RegisterUserPage />} />
+          </Routes>
+        </ThemeProvider>
+      </Main>
+    </AppContainer>
   );
 };
 
