@@ -97,27 +97,27 @@ const RegisterUserPage: React.FC = () => {
         <FormControl>
           <StyledTextField
             variant='outlined'
-            placeholder='Name'
+            label='Name'
             inputProps={{ className: classes.input }}
             onChange={e => setRegisterName(e.target.value)}
           />
           <StyledTextField
             variant='outlined'
-            placeholder='Email'
+            label='Email'
             inputProps={{ className: classes.input }}
             onChange={e => setRegisterEmail(e.target.value)}
           />
           <StyledTextField
             type='password'
             variant='outlined'
-            placeholder='Password'
+            label='Password'
             inputProps={{ className: classes.input }}
             onChange={e => setRegisterPassword(e.target.value)}
           />
           <StyledTextField
             type='password'
             variant='outlined'
-            placeholder='Confirm Password'
+            label='Confirm Password'
             inputProps={{ className: classes.input }}
             onChange={e => setConfirmRegisterPassword(e.target.value)}
           />

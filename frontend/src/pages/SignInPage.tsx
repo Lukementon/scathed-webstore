@@ -100,14 +100,14 @@ const SignInPage: React.FC = () => {
         <FormControl>
           <StyledTextField
             variant='outlined'
-            placeholder='Email'
+            label='Email'
             inputProps={{ className: classes.input }}
             onChange={e => setLoginEmail(e.target.value)}
           />
           <StyledTextField
             type='password'
             variant='outlined'
-            placeholder='Password'
+            label='Password'
             inputProps={{ className: classes.input }}
             onChange={e => setLoginPassword(e.target.value)}
           />

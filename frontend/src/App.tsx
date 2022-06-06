@@ -7,6 +7,7 @@ import useInitGoogleClient from './hooks/auth/useInitGoogleClient';
 import HomePage from './pages/HomePage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import RegisterUserPage from './pages/RegisterUserPage';
+import ShippingDetailsPage from './pages/ShippingDetailsPage';
 import ShoppingCartPage from './pages/ShoppingCartPage';
 import SignInPage from './pages/SignInPage';
 import UserDetailsPage from './pages/UserDetailsPage';
@@ -38,6 +39,7 @@ const App = () => {
             <Route path='/signin' element={<SignInPage />} />
             <Route path='/register' element={<RegisterUserPage />} />
             <Route path='/user/profile' element={<UserDetailsPage />} />
+            <Route path='/shipping' element={<ShippingDetailsPage />} />
           </Routes>
         </ThemeProvider>
       </Main>
