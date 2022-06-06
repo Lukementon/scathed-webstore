@@ -16,19 +16,19 @@ import {
   Typography,
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
 import ProductLoader from '../@scathed-ui/loading/ProductLoader';
+import useAddItemToShoppingCart from '../hooks/products/useAddItemToShoppingCart';
 import useGetQuantityForSpecificItemSize from '../hooks/products/useGetQuantityForSpecificItemSize';
 import useSingleProduct from '../hooks/products/useSingleProduct';
 import { useSelectStyles } from '../hooks/styles/themes';
-import { ShoppingCartItem, shoppingCartState } from '../state/products/cart';
 import { Product } from '../types/types';
 
 const ProductDetailsPage = () => {
+  const { addItemToShoppingCart } = useAddItemToShoppingCart();
   const navigate = useNavigate();
   const classes = useSelectStyles();
   const params = useParams();
@@ -37,7 +37,6 @@ const ProductDetailsPage = () => {
   const { product, productLoading, productError } = useSingleProduct(
     productIdFromUrlParams
   );
-  const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
 
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>(0);
@@ -53,36 +52,6 @@ const ProductDetailsPage = () => {
 
   const createData = (name: string, count: number) => ({ name, count });
   const rows = [createData('In stock:', totalProductStock as number)];
-
-  const addItemToShoppingCart = useCallback(
-    (product: Product, size: string, quantity: string | number) => {
-      const newProduct = {
-        product,
-        size,
-        quantity,
-      };
-
-      const productExistsInCart = shoppingCart.find(
-        (item: ShoppingCartItem) =>
-          item.product._id === product._id && item.size === size
-      );
-
-      if (productExistsInCart) {
-        setShoppingCart(
-          shoppingCart.map((cartItem: ShoppingCartItem) =>
-            cartItem.product._id === newProduct.product._id &&
-            cartItem.size === newProduct.size
-              ? newProduct
-              : cartItem
-          ) as ShoppingCartItem[]
-        );
-        return;
-      }
-
-      setShoppingCart([...shoppingCart, newProduct as ShoppingCartItem]);
-    },
-    [shoppingCart, setShoppingCart]
-  );
 
   return (
     <ProductDetailsContainer>

@@ -1,14 +1,27 @@
 import { Button } from '@material-ui/core';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import ShoppingCartItem from '../components/ShoppingCartItem';
 import { shoppingCartState } from '../state/products/cart';
+import { userState } from '../state/user/user';
 
 const ShoppingCartPage = () => {
-  const navigate = useNavigate();
   const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+
+  const user = useRecoilValue(userState);
+  const navigate = useNavigate();
+
+  const handleCheckoutClick = useCallback(() => {
+    if (!user?.email) {
+      const urlParams = new URLSearchParams({
+        redirect: 'shipping',
+      });
+      navigate(`/signin?${urlParams.toString()}`);
+    }
+    navigate('/shipping');
+  }, [user?.email, navigate]);
 
   useEffect(() => {
     if (!shoppingCart.length) navigate('/');
@@ -36,7 +49,11 @@ const ShoppingCartPage = () => {
         <h3>
           Subtotal ({shoppingCart.length}) items: <span>€50.00</span>{' '}
         </h3>
-        <ProceedToCheckoutButton variant='outlined' color='secondary'>
+        <ProceedToCheckoutButton
+          variant='outlined'
+          color='secondary'
+          onClick={handleCheckoutClick}
+        >
           Proceed to checkout
         </ProceedToCheckoutButton>
       </ShoppingCartRight>

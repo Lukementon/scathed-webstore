@@ -17,6 +17,7 @@ import styled from 'styled-components';
 import Alert from '../@scathed-ui/alert/Alert';
 import useFormLogin from '../hooks/auth/useFormLogin';
 import useGoogleLogin from '../hooks/auth/useGoogleLogin';
+import useUrlParams from '../hooks/routing/useUrlParams';
 import { useSelectStyles } from '../hooks/styles/themes';
 import { userState } from '../state/user/user';
 
@@ -24,19 +25,30 @@ const SignInPage: React.FC = () => {
   const user = useRecoilValue(userState);
   const [loginEmail, setLoginEmail] = useState<string | undefined>();
   const [loginPassword, setLoginPassword] = useState<string | undefined>();
-  const isFormLoginSubmitEnabled = useMemo(
-    () => !!loginEmail && !!loginPassword,
-    [loginEmail, loginPassword]
-  );
 
+  const urlParams = useUrlParams();
   const classes = useSelectStyles();
   const navigate = useNavigate();
   const { googleLoginError, loginWithGoogle, setGoogleLoginError } =
     useGoogleLogin();
   const { loginWithForm, formLoginError } = useFormLogin();
+
   const loginError = useMemo(
     () => googleLoginError || formLoginError,
     [googleLoginError, formLoginError]
+  );
+  const redirectToShipping = useMemo(
+    () => urlParams.get('redirect') === 'shipping',
+    [urlParams]
+  );
+  const isFormLoginSubmitEnabled = useMemo(
+    () => !!loginEmail && !!loginPassword,
+    [loginEmail, loginPassword]
+  );
+
+  const handleRedirectOnSignin = useCallback(
+    (urlPath: string) => navigate(urlPath),
+    [navigate]
   );
 
   const handleFormLogin = useCallback(async () => {
@@ -62,8 +74,15 @@ const SignInPage: React.FC = () => {
   );
 
   useEffect(() => {
-    user?.email && navigate('/');
-  }, [user?.email, navigate]);
+    if (redirectToShipping && user?.email) {
+      handleRedirectOnSignin('/shipping');
+      return;
+    }
+    if (user?.email) {
+      handleRedirectOnSignin('/');
+      return;
+    }
+  }, [redirectToShipping, user?.email, handleRedirectOnSignin]);
 
   return (
     <SignInContainer>

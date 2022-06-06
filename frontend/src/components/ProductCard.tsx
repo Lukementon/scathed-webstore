@@ -10,35 +10,31 @@ import {
   Select,
   Typography,
 } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SetterOrUpdater } from 'recoil';
 import styled from 'styled-components';
+import useAddItemToShoppingCart from '../hooks/products/useAddItemToShoppingCart';
 import useGetQuantityForSpecificItemSize from '../hooks/products/useGetQuantityForSpecificItemSize';
 import { useSelectStyles } from '../hooks/styles/themes';
-import { ShoppingCartItem } from '../state/products/cart';
 import { Product } from '../types/types';
 import { truncateString } from '../utils/text';
 
 interface Props {
   product: Product;
-  shoppingCart: ShoppingCartItem[];
-  setShoppingCart: SetterOrUpdater<ShoppingCartItem[]>;
 }
 
-const ProductCard: React.FC<Props> = ({
-  product,
-  shoppingCart,
-  setShoppingCart,
-}) => {
+const ProductCard: React.FC<Props> = ({ product }) => {
+  const { _id, category, countInStock, description, image, name, price } =
+    product;
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedQuantity, setSelectedQuantity] = useState<number | string>('');
 
-  const disabledAddToCartButton = !selectedSize || !selectedQuantity;
+  const disabledAddToCartButton = useMemo(
+    () => !selectedSize || !selectedQuantity,
+    [selectedSize, selectedQuantity]
+  );
 
-  const { _id, category, countInStock, description, image, name, price } =
-    product;
-
+  const { addItemToShoppingCart } = useAddItemToShoppingCart();
   const classes = useSelectStyles();
   const navigate = useNavigate();
   const quantityArray = useGetQuantityForSpecificItemSize(
@@ -46,38 +42,9 @@ const ProductCard: React.FC<Props> = ({
     selectedSize
   );
 
-  const redirectToProductDetailsPage = (id: string) =>
-    navigate(`/product/${id}`);
-
-  const addItemToShoppingCart = useCallback(
-    (product: Product, size: string, quantity: string | number) => {
-      const newProduct = {
-        product,
-        size,
-        quantity,
-      };
-
-      const productExistsInCart = shoppingCart.find(
-        (item: ShoppingCartItem) =>
-          item.product._id === product._id && item.size === size
-      );
-
-      if (productExistsInCart) {
-        setShoppingCart(
-          shoppingCart.map((cartItem: ShoppingCartItem) =>
-            cartItem.product._id === newProduct.product._id &&
-            cartItem.size === newProduct.size
-              ? newProduct
-              : cartItem
-          ) as ShoppingCartItem[]
-        );
-        return;
-      }
-      setShoppingCart([...shoppingCart, newProduct as ShoppingCartItem]);
-
-      return;
-    },
-    [shoppingCart, setShoppingCart]
+  const redirectToProductDetailsPage = useCallback(
+    (id: string) => navigate(`/product/${id}`),
+    [navigate]
   );
 
   return (
