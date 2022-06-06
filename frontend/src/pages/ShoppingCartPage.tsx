@@ -19,6 +19,7 @@ const ShoppingCartPage = () => {
         redirect: 'shipping',
       });
       navigate(`/signin?${urlParams.toString()}`);
+      return;
     }
     navigate('/shipping');
   }, [user?.email, navigate]);
