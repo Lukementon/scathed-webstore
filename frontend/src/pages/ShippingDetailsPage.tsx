@@ -5,10 +5,11 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import Alert from '../@scathed-ui/alert/Alert';
-import useFormRegistration from '../hooks/auth/useFormRegistration';
+import ShippingNavigation from '../components/ShippingNavigation';
+import useGetUserShippingAddress from '../hooks/shipping/useGetUserShippingAddress';
+import useSaveUserShippingAddress from '../hooks/shipping/useSaveUserShippingAddress';
 import { useSelectStyles } from '../hooks/styles/themes';
 
 const ShippingDetailsPage: React.FC = () => {
@@ -29,36 +30,44 @@ const ShippingDetailsPage: React.FC = () => {
   );
 
   const classes = useSelectStyles();
-  const { registerWithForm, formRegistrationError } = useFormRegistration();
-  const registrationError = useMemo(
-    () => formRegistrationError,
-    [formRegistrationError]
-  );
+  const { saveUserShippingAddress } = useSaveUserShippingAddress();
+  const { getUserShippingAddress } = useGetUserShippingAddress();
 
-  const handleFormRegistration = useCallback(async () => {
-    if (shippingAddress && shippingCity && shippingCountry && shippingPostCode)
-      await registerWithForm({
-        email: shippingCity,
-        name: shippingAddress,
-        password: shippingPostCode,
-      });
+  const handleSubmit = useCallback(() => {
+    saveUserShippingAddress({
+      shippingAddress,
+      shippingCity,
+      shippingCountry,
+      shippingPostCode,
+    });
   }, [
     shippingAddress,
     shippingCity,
     shippingCountry,
     shippingPostCode,
-    registerWithForm,
+    saveUserShippingAddress,
+  ]);
+
+  useEffect(() => {
+    const { shippingAddress, shippingCity, shippingCountry, shippingPostCode } =
+      getUserShippingAddress();
+    setShippingAddress(shippingAddress);
+    setShippingCity(shippingCity);
+    setShippingCountry(shippingCountry);
+    setShippingPostCode(shippingPostCode);
+  }, [
+    getUserShippingAddress,
+    setShippingAddress,
+    setShippingCity,
+    setShippingCountry,
+    setShippingPostCode,
   ]);
 
   return (
     <ShippingDetailsContainer>
-      {registrationError && (
-        <Alert
-          severity='error'
-          variant='filled'
-          message={registrationError as string}
-        />
-      )}
+      <ShippingNaviagationContainer>
+        <ShippingNavigation signIn shipping />
+      </ShippingNaviagationContainer>
       <ShippingDetailsCard raised={true}>
         <Typography variant='body1' color='inherit'>
           Shipping Details
@@ -68,31 +77,35 @@ const ShippingDetailsPage: React.FC = () => {
             variant='outlined'
             label='Address'
             inputProps={{ className: classes.input }}
+            value={shippingAddress}
             onChange={e => setShippingAddress(e.target.value)}
           />
           <StyledTextField
             variant='outlined'
             label='City'
             inputProps={{ className: classes.input }}
+            value={shippingCity}
             onChange={e => setShippingCity(e.target.value)}
           />
           <StyledTextField
             variant='outlined'
             label='Post Code'
             inputProps={{ className: classes.input }}
+            value={shippingPostCode}
             onChange={e => setShippingPostCode(e.target.value)}
           />
           <StyledTextField
             variant='outlined'
             label='Country'
             inputProps={{ className: classes.input }}
+            value={shippingCountry}
             onChange={e => setShippingCountry(e.target.value)}
           />
           <ContinueButton
             variant='outlined'
             color='secondary'
             disabled={!isShippingContinueButtonEnabled}
-            onClick={handleFormRegistration}
+            onClick={handleSubmit}
           >
             Continue
           </ContinueButton>
@@ -112,9 +125,16 @@ const ShippingDetailsContainer = styled.div`
   justify-content: center;
 `;
 
+const ShippingNaviagationContainer = styled.div`
+  && {
+    width: 40%;
+  }
+`;
+
 const ShippingDetailsCard = styled(Card)`
   && {
     width: 40%;
+    margin-top: 1rem;
     padding: 2rem;
     display: flex;
     flex-direction: column;

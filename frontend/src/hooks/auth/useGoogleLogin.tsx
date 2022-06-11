@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 import { GoogleLoginResponse } from 'react-google-login';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userState } from '../../state/user/user';
 
 const useGoogleLogin = () => {
-  const setUser = useRecoilState(userState)[1];
+  const setUser = useSetRecoilState(userState);
   const [googleLoginError, setGoogleLoginError] = useState<Error | unknown>();
   const loginWithGoogle = useCallback(
     async (googleData: GoogleLoginResponse) => {
