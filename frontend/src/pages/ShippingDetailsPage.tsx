@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ShippingNavigation from '../components/ShippingNavigation';
 import useGetUserShippingAddress from '../hooks/shipping/useGetUserShippingAddress';
@@ -30,6 +31,7 @@ const ShippingDetailsPage: React.FC = () => {
   );
 
   const classes = useSelectStyles();
+  const navigate = useNavigate();
   const { saveUserShippingAddress } = useSaveUserShippingAddress();
   const { getUserShippingAddress } = useGetUserShippingAddress();
 
@@ -40,11 +42,13 @@ const ShippingDetailsPage: React.FC = () => {
       shippingCountry,
       shippingPostCode,
     });
+    navigate('/summary');
   }, [
     shippingAddress,
     shippingCity,
     shippingCountry,
     shippingPostCode,
+    navigate,
     saveUserShippingAddress,
   ]);
 

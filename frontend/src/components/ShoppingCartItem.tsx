@@ -113,13 +113,19 @@ const ShoppingCartItem: React.FC<Props> = ({
                 ))}
               </Select>
             </StyledFormControl>
-            <p
-              onClick={() =>
-                removeItemFromShoppingCart(cartItem.product._id, cartItem.size)
-              }
-            >
-              Delete
-            </p>
+            <Wrapper>
+              <DeleteButton
+                onClick={() =>
+                  removeItemFromShoppingCart(
+                    cartItem.product._id,
+                    cartItem.size
+                  )
+                }
+              >
+                Delete
+              </DeleteButton>
+              <p>Price: €{cartItem.product.price.toFixed(2)}</p>
+            </Wrapper>
           </ProductModificationContainer>
         </ProductDetailsContainer>
       </InnerProductCard>
@@ -133,7 +139,7 @@ const ShoppingCartCard = styled(Paper)`
   && {
     background-color: #2f2f2f;
     color: white;
-    width: 100%;
+    min-width: 100%;
     margin: 1.5rem 0;
     padding: 1rem;
   }
@@ -141,7 +147,7 @@ const ShoppingCartCard = styled(Paper)`
 
 const InnerProductCard = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
 `;
 
@@ -152,6 +158,7 @@ const ProductImage = styled.img`
 `;
 
 const ProductDetailsContainer = styled.div`
+  width: 100%;
   > p {
     margin: 0.25rem 0;
   }
@@ -176,5 +183,18 @@ const StyledFormControl = styled(FormControl)`
     width: 10%;
     margin-right: 1rem;
     text-align: left;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const DeleteButton = styled.p`
+  margin-right: 0.5rem;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
   }
 `;

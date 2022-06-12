@@ -5,6 +5,7 @@ import Header from './components/Header';
 import useAutoLogin from './hooks/auth/useAutoLogin';
 import useInitGoogleClient from './hooks/auth/useInitGoogleClient';
 import HomePage from './pages/HomePage';
+import OrderSummaryPage from './pages/OrderSummaryPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import RegisterUserPage from './pages/RegisterUserPage';
 import ShippingDetailsPage from './pages/ShippingDetailsPage';
@@ -40,6 +41,7 @@ const App = () => {
             <Route path='/register' element={<RegisterUserPage />} />
             <Route path='/user/profile' element={<UserDetailsPage />} />
             <Route path='/shipping' element={<ShippingDetailsPage />} />
+            <Route path='/summary' element={<OrderSummaryPage />} />
           </Routes>
         </ThemeProvider>
       </Main>

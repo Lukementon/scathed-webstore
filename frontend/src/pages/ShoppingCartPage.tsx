@@ -1,14 +1,27 @@
 import { Button } from '@material-ui/core';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import ShoppingCartItem from '../components/ShoppingCartItem';
-import { shoppingCartState } from '../state/products/cart';
+import {
+  ShoppingCartItem as CartItemType,
+  shoppingCartState,
+} from '../state/products/cart';
 import { userState } from '../state/user/user';
 
 const ShoppingCartPage = () => {
   const [shoppingCart, setShoppingCart] = useRecoilState(shoppingCartState);
+
+  const shoppingCartTotal = useMemo(
+    () =>
+      shoppingCart.reduce(
+        (acc: number, item: CartItemType): number =>
+          (acc += item.product.price * item.quantity),
+        0
+      ),
+    [shoppingCart]
+  ).toFixed(2);
 
   const user = useRecoilValue(userState);
   const navigate = useNavigate();
@@ -48,7 +61,8 @@ const ShoppingCartPage = () => {
 
       <ShoppingCartRight>
         <h3>
-          Subtotal ({shoppingCart.length}) items: <span>€50.00</span>{' '}
+          Subtotal ({shoppingCart.length}) items:{' '}
+          <span>€{shoppingCartTotal}</span>{' '}
         </h3>
         <ProceedToCheckoutButton
           variant='outlined'

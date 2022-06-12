@@ -21,7 +21,7 @@ const ShippingNavigation: React.FC<Props> = ({
     () => signIn && shipping,
     [signIn, shipping]
   );
-  const isPaymentActive = useMemo(
+  const isSummaryActive = useMemo(
     () => signIn && shipping && payment,
     [signIn, shipping, payment]
   );
@@ -50,12 +50,12 @@ const ShippingNavigation: React.FC<Props> = ({
         <StyledDivider isActive={isShippingActive}> - </StyledDivider>
         <StyledNode
           color='secondary'
-          isActive={isPaymentActive}
-          onClick={() => isPaymentActive && navigate('/payment')}
+          isActive={isSummaryActive}
+          onClick={() => isSummaryActive && navigate('/summary')}
         >
-          Payment
+          Summary
         </StyledNode>
-        <StyledDivider isActive={isPaymentActive}> - </StyledDivider>
+        <StyledDivider isActive={isSummaryActive}> - </StyledDivider>
         <StyledNode
           color='secondary'
           isActive={isPlaceOrderActive}
