@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@material-ui/core';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -16,31 +16,50 @@ const ShippingNavigation: React.FC<Props> = ({
   placeOrder = false,
 }) => {
   const navigate = useNavigate();
+  const isSignInActive = useMemo(() => signIn, [signIn]);
+  const isShippingActive = useMemo(
+    () => signIn && shipping,
+    [signIn, shipping]
+  );
+  const isPaymentActive = useMemo(
+    () => signIn && shipping && payment,
+    [signIn, shipping, payment]
+  );
+  const isPlaceOrderActive = useMemo(
+    () => signIn && shipping && payment && placeOrder,
+    [signIn, shipping, payment, placeOrder]
+  );
 
   return (
     <Container>
-      <StyledBreadcrumbs separator='-' aria-label='breadcrumb'>
-        <StyledNode isActive={signIn} onClick={() => navigate('/signin')}>
+      <StyledBreadcrumbs>
+        <StyledNode
+          isActive={isSignInActive}
+          onClick={() => isSignInActive && navigate('/signin')}
+        >
           Sign in
         </StyledNode>
+        <StyledDivider isActive={isSignInActive}> - </StyledDivider>
         <StyledNode
           color='secondary'
-          isActive={signIn && shipping}
-          onClick={() => navigate('/shipping')}
+          isActive={isShippingActive}
+          onClick={() => isShippingActive && navigate('/shipping')}
         >
           Shipping
         </StyledNode>
+        <StyledDivider isActive={isShippingActive}> - </StyledDivider>
         <StyledNode
           color='secondary'
-          isActive={signIn && shipping && payment}
-          onClick={() => navigate('/payment')}
+          isActive={isPaymentActive}
+          onClick={() => isPaymentActive && navigate('/payment')}
         >
           Payment
         </StyledNode>
+        <StyledDivider isActive={isPaymentActive}> - </StyledDivider>
         <StyledNode
           color='secondary'
-          isActive={signIn && shipping && payment && placeOrder}
-          onClick={() => navigate('/placeorder')}
+          isActive={isPlaceOrderActive}
+          onClick={() => isPlaceOrderActive && navigate('/placeorder')}
         >
           Place order
         </StyledNode>
@@ -55,7 +74,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const StyledBreadcrumbs = styled(Breadcrumbs)`
+const StyledBreadcrumbs = styled.div`
   && {
     display: flex;
     align-items: center;
@@ -69,4 +88,10 @@ const StyledNode = styled('span')<{ isActive: boolean }>`
     color: ${({ isActive }) => (isActive ? 'white' : 'gray')};
     cursor: ${({ isActive }) => (isActive ? 'pointer' : 'default')};
   }
+`;
+
+const StyledDivider = styled.span<{ isActive: boolean }>`
+  display: inline-block;
+  margin: 0rem 1rem;
+  color: ${({ isActive }) => (isActive ? 'white' : 'gray')};
 `;
